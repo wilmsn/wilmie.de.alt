@@ -58,6 +58,12 @@ insert into menu(menu1_id,menu2_id,menu3_id,role,show_dt,show_mo,has_sub,class_d
 values(5,1,2,'+',true,true,false,' ','a','Wetterstation','wetter','#','/content/wetter_content.php');
 insert into menu(menu1_id,menu2_id,menu3_id,role,show_dt,show_mo,has_sub,class_dt,class_mo,label,bookmark,url,content)
 values(5,2,1,'+',true,true,false,' ','a','Wiki: Elektronik',' ','/wiki/index.php?title=Elektronik',' ');
+insert into menu(menu1_id,menu2_id,menu3_id,role,show_dt,show_mo,has_sub,class_dt,class_mo,label,bookmark,url,content)
+values(5,3,1,'+',true,true,true,'has_sub','a','Demos',' ','#',' ');
+insert into menu(menu1_id,menu2_id,menu3_id,role,show_dt,show_mo,has_sub,class_dt,class_mo,label,bookmark,url,content)
+values(5,3,2,'+',true,true,false,' ','a','Demo: Haussteuerung','demo_haussteuerung','#','/demo/haussteuerung_content.php');
+insert into menu(menu1_id,menu2_id,menu3_id,role,show_dt,show_mo,has_sub,class_dt,class_mo,label,bookmark,url,content)
+values(5,3,3,'+',true,true,false,' ','a','Demo: Sensorwerte','demo_sensorwerte','#','/demo/sensorwerte_content.php');
 
 insert into menu(menu1_id,menu2_id,menu3_id,role,show_dt,show_mo,has_sub,class_dt,class_mo,label,bookmark,url,content)
 values(9,1,1,'-',true,true,false,' ','a','Login',' ','#','/content/login_content.php');
