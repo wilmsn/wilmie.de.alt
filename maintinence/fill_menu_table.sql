@@ -51,6 +51,8 @@ insert into menu(menu1_id,menu2_id,menu3_id,role,show_dt,show_mo,has_sub,class_d
 values(4,1,2,'a',true,true,false,' ','a','Haussteuerung','haussteuerung','#','/content/haussteuerung_content.php');
 insert into menu(menu1_id,menu2_id,menu3_id,role,show_dt,show_mo,has_sub,class_dt,class_mo,label,bookmark,url,content)
 values(4,1,3,'a',true,true,false,' ','a','Sensorwerte','sensorwerte','#','/content/sensorwerte_content.php');
+insert into menu(menu1_id,menu2_id,menu3_id,role,show_dt,show_mo,has_sub,class_dt,class_mo,label,bookmark,url,content)
+values(4,1,4,'a',true,true,false,' ','a','FHEM',' ','/fhem',' ');
 
 insert into menu(menu1_id,menu2_id,menu3_id,role,show_dt,show_mo,has_sub,class_dt,class_mo,label,bookmark,url,content)
 values(5,1,1,'+',true,true,true,'has_sub','b','Elektronik',' ','#',' ');

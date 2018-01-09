@@ -119,7 +119,7 @@ $('#home').append("<div data-role='panel' id='menu_panel' data-theme='a' data-di
 # Build Menu:
 # Step 1: Add Entries on Main Menu and additional Menu Panels
 	$sql="select menu1_id, menu2_id, menu3_id, class_mo, label, has_sub, url, bookmark, content, menu3_id from menu "
-	    ."where ".$sql_show." order by menu1_id, menu2_id, menu3_id asc";	
+	    ."where show_mo = 1 and ".$sql_show." order by menu1_id, menu2_id, menu3_id asc";	
 	$stmt = $www_db->prepare($sql);
 	$stmt->execute();
 	while ( $row = $stmt->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_NEXT) ) {
@@ -192,7 +192,7 @@ $(document).ready(function(){
 <?php		
 # Step 1: Add Entries on Main Menu (Level 1)
 	$sql="select menu1_id, menu2_id, menu3_id, class_dt, label, has_sub, url, bookmark, content from menu "
-	    ."where ".$sql_show." order by menu1_id, menu2_id, menu3_id asc";	
+	    ."where show_dt = 1 and ".$sql_show." order by menu1_id, menu2_id, menu3_id asc";	
 	$stmt = $www_db->prepare($sql);
 	$stmt->execute();
 	while ( $row = $stmt->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_NEXT) ) {
@@ -201,42 +201,42 @@ $(document).ready(function(){
 			if ($row['menu3_id'] == 1) {
 				if ($row['has_sub'] == 1) {
 # First level Label			
-					echo "$('#mymenu').append(\"<li class='has_sub'><a href='#'><span>".$row['label']."</span></a><ul id='ml_".$row['menu1_id']."'></ul>\");\n";
+					echo "$('#mymenu').append(\"<li class='".$row['class_dt']."'><a href='#'><span>".$row['label']."</span></a><ul id='ml_".$row['menu1_id']."'></ul>\");\n";
 				} else {
 # First Level Entries
 					if ( $row['url'] == "#" ) {
-						echo "$('#mymenu').append(\"<li><a href='#' onclick='getcontent(\\\"".$row['content']."\\\" , \\\"".$row['bookmark']."\\\");' >".$row['label']."</a></li>\");\n";
+						echo "$('#mymenu').append(\"<li class='".$row['class_dt']."'><a href='#' onclick='getcontent(\\\"".$row['content']."\\\" , \\\"".$row['bookmark']."\\\");' >".$row['label']."</a></li>\");\n";
 					} else {
-						echo "$('#mymenu').append(\"<li><a href='".$row['url']."' target='_blank' >".$row['label']."</a></li>\");\n";
+						echo "$('#mymenu').append(\"<li class='".$row['class_dt']."'><a href='".$row['url']."' target='_blank' >".$row['label']."</a></li>\");\n";
 					}
 				}					
 			} else {   # menu3_id > 1 sind immer Entries !!!
 # Second Level Entries
 				if ( $row['url'] == "#" ) {
-					echo "$('#ml_".$row['menu1_id']."').append(\"<li><a href='#' onclick='getcontent(\\\"".$row['content']."\\\" , \\\"".$row['bookmark']."\\\");' >".$row['label']."</a></li>\");\n";
+					echo "$('#ml_".$row['menu1_id']."').append(\"<li class='".$row['class_dt']."'><a href='#' onclick='getcontent(\\\"".$row['content']."\\\" , \\\"".$row['bookmark']."\\\");' >".$row['label']."</a></li>\");\n";
 				} else {
-					echo "$('#ml_".$row['menu1_id']."').append(\"<li><a href='".$row['url']."' target='_blank' >".$row['label']."</a></li>\");\n";
+					echo "$('#ml_".$row['menu1_id']."').append(\"<li class='".$row['class_dt']."'><a href='".$row['url']."' target='_blank' >".$row['label']."</a></li>\");\n";
 				}
 			}				
 		} else {
 			if ($row['menu3_id'] == 1) {
 				if ($row['has_sub'] == 1) {
 # Second level Label			
-					echo "$('#ml_".$row['menu1_id']."').append(\"<li class='has_sub'><a href='#'><span>".$row['label']."</span></a><ul id='ml_".$row['menu1_id'].$row['menu2_id']."'></ul>\");\n";
+					echo "$('#ml_".$row['menu1_id']."').append(\"<li class='".$row['class_dt']."'><a href='#'><span>".$row['label']."</span></a><ul id='ml_".$row['menu1_id'].$row['menu2_id']."'></ul>\");\n";
 				} else {
 # Second Level Entries					
 					if ( $row['url'] == "#" ) {
-						echo "$('#ml_".$row['menu1_id']."').append(\"<li><a href='#' onclick='getcontent(\\\"".$row['content']."\\\" , \\\"".$row['bookmark']."\\\");' >".$row['label']."</a></li>\");\n";
+						echo "$('#ml_".$row['menu1_id']."').append(\"<li class='".$row['class_dt']."'><a href='#' onclick='getcontent(\\\"".$row['content']."\\\" , \\\"".$row['bookmark']."\\\");' >".$row['label']."</a></li>\");\n";
 					} else {
-						echo "$('#ml_".$row['menu1_id']."').append(\"<li><a href='".$row['url']."' target='_blank' >".$row['label']."</a></li>\");\n";
+						echo "$('#ml_".$row['menu1_id']."').append(\"<li class='".$row['class_dt']."'><a href='".$row['url']."' target='_blank' >".$row['label']."</a></li>\");\n";
 					}
 				}					
 			} else {   # menu3_id > 1 sind immer Entries !!!
 # Third Level Entries
 				if ( $row['url'] == "#" ) {
-					echo "$('#ml_".$row['menu1_id'].$row['menu2_id']."').append(\"<li><a href='#' onclick='getcontent(\\\"".$row['content']."\\\" , \\\"".$row['bookmark']."\\\");' >".$row['label']."</a></li>\");\n";
+					echo "$('#ml_".$row['menu1_id'].$row['menu2_id']."').append(\"<li class='".$row['class_dt']."'><a href='#' onclick='getcontent(\\\"".$row['content']."\\\" , \\\"".$row['bookmark']."\\\");' >".$row['label']."</a></li>\");\n";
 				} else {
-					echo "$('#ml_".$row['menu1_id'].$row['menu2_id']."').append(\"<li><a href='".$row['url']."' target='_blank' >".$row['label']."</a></li>\");\n";
+					echo "$('#ml_".$row['menu1_id'].$row['menu2_id']."').append(\"<li class='".$row['class_dt']."'><a href='".$row['url']."' target='_blank' >".$row['label']."</a></li>\");\n";
 				}
 			}				
 			
