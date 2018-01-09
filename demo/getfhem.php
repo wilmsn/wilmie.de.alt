@@ -62,32 +62,32 @@ if (isset($_GET["eigenschaft"])) {  $eigenschaft=$_GET["eigenschaft"]; }
 	}
 	If (  $geraet == "Balkon_Steckdose") {
 		if (  $eigenschaft == "state") {
-			print on;
+			print "on";
 		}
 	}
 	If (  $geraet == "HS_Balkon_Steckdose") {
 		if (  $eigenschaft == "state") {
-			print Auto;
+			print "auto";
 		}
 	}
 	If (  $geraet == "Terasse_Steckdose") {
 		if (  $eigenschaft == "state") {
-			print off;
+			print "off";
 		}
 	}
 	If (  $geraet == "HS_Terasse_Steckdose") {
 		if (  $eigenschaft == "state") {
-			print Aus;
+			print "aus";
 		}
 	}
 	If (  $geraet == "Flur_Steckdose") {
 		if (  $eigenschaft == "Relay") {
-			print off;
+			print "off";
 		}
 	}
 	If (  $geraet == "HS_Flur_Steckdose") {
 		if (  $eigenschaft == "state") {
-			print Auto;
+			print "auto";
 		}
 	}
 ?>
