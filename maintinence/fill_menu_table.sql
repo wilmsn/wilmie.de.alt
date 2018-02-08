@@ -1,6 +1,6 @@
 delete from menu;
 insert into menu(ID,  menu1_id,  menu2_id,  menu3_id,  role,  show_dt,  show_mo,  has_sub,  class_dt,  class_mo,   label,    bookmark,   url,   content)
-values          (1,   1,         1,         1,         '+',   true,     true,     false,    ' ',       'a',        'Info',   'info',     '#',   '/content/info_content.php');
+values          (1,   1,         1,         1,         '+',   true,     true,     false,    'active',       'a',        'Info',   'info',     '#',   '/content/info_content.php');
 insert into menu(menu1_id,menu2_id,menu3_id,role,show_dt,show_mo,has_sub,class_dt,class_mo,label,bookmark,url,content)
 values(2,1,1,'+',true,true,true,'has_sub','b','Reisen',' ','#',' ');
 insert into menu(menu1_id,menu2_id,menu3_id,role,show_dt,show_mo,has_sub,class_dt,class_mo,label,bookmark,url,content)

@@ -10,16 +10,14 @@ table.noborder td.noborder {
 </style>
 
 <?php
-function one_col($mypage,$id,$tab) {
-	$DB_FILENAME="/var/database/sensorhub.db";
-	$db = new SQLite3($DB_FILENAME);
+require_once("/sd_p2/web/php_inc/sensorhub.inc.php");
+
+function one_col($sensorhub_db,$mypage,$id) {
 	$limit1=($mypage)*10;
 	$limit2=10;
 	$returnstr="<table><tr><th>Zeitpunkt</th><th>Wert</th></th></tr>";
-		$query_str="select strftime('%d.%m.%Y %H:%M',datetime(utime, 'unixepoch', 'localtime')), substr(value,1,4) from ".$tab."data ".
-	               " where ".$tab."_id = ".$id." order by utime desc LIMIT ".$limit1.", ".$limit2;
-	$results = $db->query($query_str);
-    while ($row = $results->fetchArray() ) {
+	foreach ($sensorhub_db->query("select date_format(from_unixtime(utime),'%d.%m.%y %H:%i'), substr(value,1,4) from sensordata ".
+	               " where sensor_id = ".$id." order by utime desc LIMIT ".$limit1.", ".$limit2) as $row) {
   	    $returnstr=$returnstr."<tr><td>$row[0]</td><td>$row[1]</td></tr>";
 	}
 	$returnstr=$returnstr."</table>";
@@ -30,12 +28,6 @@ if (isset($_GET["sensor"]))  {
   $sensor=$_GET["sensor"];
 } else { 
   $sensor=0; 
-}
-if (isset($_GET["actor"]))  {
-  $actor=$_GET["actor"];
-} else { 
-  $actor=0; 
-  if ($sensor=0){$sensor=1;}  ; 
 }
 if (isset($_GET["num_col"]))  {
   $num_col=$_GET["num_col"];
@@ -49,26 +41,20 @@ if (isset($_GET["page"]))  {
 }
 
 if ( $sensor > 0 ) { 
-		$tab="sensor";
 		$id=$sensor;
-		$label="Sensor";
-} else { 
-		$tab="actor";
-		$id=$actor;
-		$label="Aktor";
 }
-	echo "<table class=noborder><tr><td>".one_col($page,$id,$tab);
+	echo "<table class=noborder><tr><td>".one_col($sensorhub_db,$page,$id);
     if ($num_col > 1) {
-    	echo "</td><td>".one_col($page+1,$id,$tab);
+    	echo "</td><td>".one_col($sensorhub_db,$page+1,$id);
 	}
     if ($num_col > 2) {
-    	echo "</td><td>".one_col($page+2,$id,$tab);
+    	echo "</td><td>".one_col($sensorhub_db,$page+2,$id);
 	}
     if ($num_col > 3) {
-    	echo "</td><td>".one_col($page+3,$id,$tab);
+    	echo "</td><td>".one_col($sensorhub_db,$page+3,$id);
 	}
     if ($num_col > 4) {
-    	echo "</td><td>".one_col($page+4,$id,$tab);
+    	echo "</td><td>".one_col($sensorhub_db,$page+4,$id);
 	}
 	echo "</td></tr></table>";
 ?>

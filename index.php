@@ -12,6 +12,8 @@ $nachname="";
 $userid="";
 
 $login_msg = "";
+$reload_needed = "";
+
 if (isset($_POST['abmelden'])) {
 	$abmelden = $_POST['abmelden'];
 	if ( $abmelden == 'ja' ) {
@@ -20,36 +22,58 @@ if (isset($_POST['abmelden'])) {
 		//Remove Cookies
 		setcookie("identifier","",time()-(3600*24*365)); 
 		setcookie("securitytoken","",time()-(3600*24*365)); 
+		$login_msg = "abgemeldet!";
+		$reload_needed = "ja";
+		#die("abgemeldet!"); 
 	}
 }	
 
 if (isset($_POST['email']) && isset($_POST['passwort'])) {
 	$email = $_POST['email'];
 	$passwort = $_POST['passwort'];
-
 	$statement = $www_db->prepare("SELECT * FROM users WHERE email = :email");
 	$result = $statement->execute(array('email' => $email));
 	$user = $statement->fetch();
-
 	//Überprüfung des Passworts
 	if ($user !== false && password_verify($passwort, $user['passwort'])) {
 		$_SESSION['userid'] = $user['id'];
-
 		//Möchte der Nutzer angemeldet beleiben?
 		if(isset($_POST['angemeldet_bleiben'])) {
 			$identifier = random_string();
-			$securitytoken = random_string();
-				
+			$securitytoken = random_string();				
 			$insert = $www_db->prepare("INSERT INTO securitytokens (user_id, identifier, securitytoken) VALUES (:user_id, :identifier, :securitytoken)");
 			$insert->execute(array('user_id' => $user['id'], 'identifier' => $identifier, 'securitytoken' => sha1($securitytoken)));
 			setcookie("identifier",$identifier,time()+(3600*24*365)); //Valid for 1 year
 			setcookie("securitytoken",$securitytoken,time()+(3600*24*365)); //Valid for 1 year
 		}
+		$reload_needed = "ja";
 	} else {
 		$login_msg =  "(Login fehlerhaft)";
 	}
-
 }
+
+if (!is_checked_in()) {
+	if ( isset($_COOKIE['identifier']) && isset($_COOKIE['securitytoken']) ) {
+		$identifier = $_COOKIE['identifier'];
+		$securitytoken = $_COOKIE['securitytoken'];
+		$statement = $www_db->prepare("SELECT * FROM securitytokens WHERE identifier = ?");
+		$result = $statement->execute(array($identifier));
+		$securitytoken_row = $statement->fetch();
+		if(sha1($securitytoken) !== $securitytoken_row['securitytoken']) {
+			die('Ein vermutlich gestohlener Security Token wurde identifiziert');
+		} else { //Token war korrekt 
+			//Setze neuen Token
+			$neuer_securitytoken = random_string(); 
+			$insert = $www_db->prepare("UPDATE securitytokens SET securitytoken = :securitytoken, used_at = CURRENT_TIMESTAMP WHERE identifier = :identifier");
+			$insert->execute(array('securitytoken' => sha1($neuer_securitytoken), 'identifier' => $identifier));
+			setcookie("identifier",$identifier,time()+(3600*24*365)); //1 Jahr Gültigkeit
+			setcookie("securitytoken",$neuer_securitytoken,time()+(3600*24*365)); //1 Jahr Gültigkeit
+			//Logge den Benutzer ein
+			$_SESSION['userid'] = $securitytoken_row['user_id'];
+		}
+		$reload_needed = "ja";
+	}		
+}	
 
 if (is_checked_in()) {
 	$user = check_user();
@@ -58,10 +82,11 @@ if (is_checked_in()) {
 	$userid = htmlentities($user['id']);
 	$angemeldet = 'ja';
 	$sql_show = "role in ('+', 'a')";
-} else {
+} else {	
 	$angemeldet = 'nein';
 	$sql_show = "role in ('+', '-')";
 }	
+
 
 $urlPart = explode("/", $_SERVER['REQUEST_URI']);
 if ( $urlPart[1] == "") { $urlPart[1]="-"; } 
@@ -95,7 +120,12 @@ if (top!=self) top.location.href=self.location.href;
  var userid='<?php echo $userid; ?>'; 
  var angemeldet='<?php echo $angemeldet; ?>'; 
  var login_msg='<?php echo $login_msg; ?>'; 
+<?php
+if ($reload_needed == "ja") {
+	echo "window.location.reload(true);\n";	
+}
 
+?>
 <?php if(is_mobile_browser()): ?>
  var info='info'; 
  var infourl='/main.php'; 

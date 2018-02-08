@@ -1,93 +1,30 @@
 <?php
+session_start();
+require_once("/sd_p2/web/php_inc/config.inc.php");
+require_once("/sd_p2/web/php_inc/functions.inc.php");
 
+if(is_checked_in()) {
 if (isset($_GET["geraet"])) {  $geraet=$_GET["geraet"]; }
 if (isset($_GET["eigenschaft"])) {  $eigenschaft=$_GET["eigenschaft"]; }
 
-	If ( $geraet == "HT_Wohnzimmer1") {
-		if ( $eigenschaft =="desiredTemperature") {
-			print 21;
-		}
-		if ( $eigenschaft == "mode") {
-			print "auto";
-		}
+//Hostname und Telnet-Port des FHEM-Servers
+$fhemhost = "localhost";
+$fhemport = 7072;
+
+//Socket öffnen
+$fhemsock = fsockopen($fhemhost, $fhemport, $errno, $errstr, 30);
+$fhemcmd = "{ ReadingsVal(\"".$geraet."\",\"".$eigenschaft."\",0);; }\r\nquit\r\n";
+//print $fhemcmd."<br>";
+fwrite($fhemsock, $fhemcmd);
+#while(!feof($fhemsock)) {
+if(!feof($fhemsock)) {
+    $ergebnis=fgets($fhemsock, 128);
+	if ( strlen($ergebnis) > 2 ) {
+		$zustand=explode(" ",$ergebnis);
+        print trim($zustand[0]);
 	}
-	If ( $geraet == "HT_Schlafzimmer") {
-		if ( $eigenschaft =="desiredTemperature") {
-			print 14;
-		}
-		if ( $eigenschaft == "mode") {
-			print "auto";
-		}
-	}
-	If (  $geraet == "HT_Kueche") {
-		if (  $eigenschaft == "desiredTemperature") {
-			print 19;
-		}
-		if (  $eigenschaft == "mode") {
-			print "auto";
-		}
-	}
-	If (  $geraet == "HT_Bastelzimmer") {
-		if (  $eigenschaft == "desiredTemperature") {
-			print 16;
-		}
-		if (  $eigenschaft == "mode") {
-			print "manual";
-		}
-	}
-	If (  $geraet == "aussentemperatur") {
-		if (  $eigenschaft == "state") {
-			print -6.7;
-		}
-	}
-	If (  $geraet == "Bastelzimmer_Temp") {
-		if (  $eigenschaft == "state") {
-			print 14.2;
-		}
-	}
-	If (  $geraet == "Kueche_Temp") {
-		if (  $eigenschaft == "state") {
-			print 19.8;
-		}
-	}
-	If (  $geraet == "HT_Wohnzimmer1") {
-		if (  $eigenschaft == "temperature") {
-			print 20.7;
-		}
-	}
-	If (  $geraet == "HT_Schlafzimmer") {
-		if (  $eigenschaft == "temperature") {
-			print 16.3;
-		}
-	}
-	If (  $geraet == "Balkon_Steckdose") {
-		if (  $eigenschaft == "state") {
-			print "on";
-		}
-	}
-	If (  $geraet == "HS_Balkon_Steckdose") {
-		if (  $eigenschaft == "state") {
-			print "auto";
-		}
-	}
-	If (  $geraet == "Terasse_Steckdose") {
-		if (  $eigenschaft == "state") {
-			print "off";
-		}
-	}
-	If (  $geraet == "HS_Terasse_Steckdose") {
-		if (  $eigenschaft == "state") {
-			print "aus";
-		}
-	}
-	If (  $geraet == "Flur_Steckdose") {
-		if (  $eigenschaft == "Relay") {
-			print "off";
-		}
-	}
-	If (  $geraet == "HS_Flur_Steckdose") {
-		if (  $eigenschaft == "state") {
-			print "auto";
-		}
-	}
+}
+} else {
+	print "nolog";
+}	
 ?>
