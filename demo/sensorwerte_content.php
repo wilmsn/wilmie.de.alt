@@ -21,6 +21,7 @@ function editnode(mynode){
 }
 
 function savenode(mynodeid){
+	mynid=$('#in_nid_'+mynodeid).val();
 	mynn=$('#in_nn_'+mynodeid).val();
 	myni=$('#in_ni_'+mynodeid).val();
 	myst1=$('#in_st1_'+mynodeid).val();
@@ -30,11 +31,21 @@ function savenode(mynodeid){
 	myrm=$('#in_rm_'+mynodeid).val();
 	mybid=$('#in_bid_'+mynodeid).val();
 	myvd=$('#in_vd_'+mynodeid).val();
-	$.get(mydir+'/savenode.php',{nodeid: mynodeid, nodename: mynn, ni: myni, st1: myst1, st2: myst2, st3: myst3, st4: myst4, vd: myvd, rm: myrm, bid: mybid }, function(data) { 
+	$.get(mydir+'/savenode.php',{nid: mynid, onid: mynodeid, nn: mynn, ni: myni, st1: myst1, st2: myst2, st3: myst3, st4: myst4, vd: myvd, rm: myrm, bid: mybid }, function(data) { 
 		alert(data);
 	});
 }
 
+function savesensor(mysensorid){
+	mysid=$('#is_sid_'+mysensorid).val();
+	mysn=$('#is_sn_'+mysensorid).val();
+	mysi=$('#is_si_'+mysensorid).val();
+	mynid=$('#is_nid_'+mysensorid).val();
+	mych=$('#is_ch_'+mysensorid).val();
+	$.get(mydir+'/savesensor.php',{osid: mysensorid, sid: mysid, sn: mysn, si: mysi, nid: mynid, ch: mych }, function(data) { 
+		alert(data);
+	});
+}
 function showsensor(mysensor) {
     // alert(width);
 	if (width < 450) { mynum_col=1; } else { 
@@ -146,7 +157,7 @@ $(document).ready(function(){
 		</div>
         <div id="details_ctl">
 			<input type='range' id='myslider1' data-popup-enabled='true' value=0 min=0 max=10 step=1/>
-			<button id="zeigliste" class="ui-btn">Sensorliste zeigen</button>
+			<button id="zeigliste" class="ui-btn">Zurück zur Übersicht</button>
 		</div>
 		<div id="hideme">	
 			<input id='mysensor'/>
