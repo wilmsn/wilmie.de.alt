@@ -14,9 +14,9 @@ function shownodes() {
 function editnode(mynode){
 	$('#dn'+mynode).toggle();
 	if ($('#dn'+mynode).is(":visible")) {
-		$('#s'+mynode).attr('class','ui-btn ui-btn-icon-right ui-icon-carat-d ui-shadow');
+		$('#n'+mynode).attr('class','ui-btn ui-btn-icon-right ui-icon-carat-d ui-shadow');
 	} else {
-		$('#s'+mynode).attr('class','ui-btn ui-btn-icon-right ui-icon-carat-r ui-shadow');
+		$('#n'+mynode).attr('class','ui-btn ui-btn-icon-right ui-icon-carat-r ui-shadow');
 	}
 }
 
@@ -34,6 +34,24 @@ function savenode(mynodeid){
 	$.get(mydir+'/savenode.php',{nid: mynid, onid: mynodeid, nn: mynn, ni: myni, st1: myst1, st2: myst2, st3: myst3, st4: myst4, vd: myvd, rm: myrm, bid: mybid }, function(data) { 
 		alert(data);
 	});
+}
+
+function enablesensor(){
+	$('#sensoren').toggle();
+	if ($('#sensoren').is(":visible")) {
+		$('#senshead').attr('class','ui-btn ui-btn-icon-right ui-icon-carat-d ui-shadow');
+	} else {
+		$('#senshead').attr('class','ui-btn ui-btn-icon-right ui-icon-carat-r ui-shadow');
+	}
+}
+
+function editsensor(sensor){
+	$('#se'+sensor).toggle();
+	if ($('#se'+sensor).is(":visible")) {
+		$('#sa'+sensor).attr('class','ui-btn ui-btn-icon-right ui-icon-carat-d ui-shadow');
+	} else {
+		$('#sa'+sensor).attr('class','ui-btn ui-btn-icon-right ui-icon-carat-r ui-shadow');
+	}
 }
 
 function savesensor(mysensorid){

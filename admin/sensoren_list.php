@@ -106,12 +106,12 @@ foreach ($sensorhub_db->query("select Sensor_id, Sensor_name, add_info, node_id,
 		  "<tr><td width=200>Sensornummer:</td><td width=300><input type=hidden id='is_sid_".$row_sensor[0]."'>".$row_sensor[0]."</td></tr>".
 		  "<tr><td width=200>Sensorname:</td><td width=300><input size=25 id='is_sn_".$row_sensor[0]."' value='".$row_sensor[1]."'></td></tr>".
 		  "<tr><td width=200>Sensorinfo:</td><td width=300><textarea id='is_si_".$row_sensor[0]."' height=175>".$row_sensor[2]."</textarea></td></tr>".		  
-		  "<tr><td width=200>Node_ID:</td><td width=300><select id='is_nid_".$row_sensor[0]."'>";
+		  "<tr><td width=200>Node (ID):</td><td width=300><select id='is_nid_".$row_sensor[0]."'>";
 	foreach ($sensorhub_db->query("select node_id, node_name from node where node_id = '".$row_sensor[3]."' ") as $rn) {
-        print "<option value='".$rn[0]."' selected>".$rn[1]."</option>";
+        print "<option value='".$rn[0]."' selected>".$rn[1]." (".$rn[0].")</option>";
 	}		
 	foreach ($sensorhub_db->query("select node_id, node_name from node where node_id != '".$row_sensor[3]."' ") as $rn) {
-        print "<option value='".$rn[0]."'>".$rn[1]."</option>";
+        print "<option value='".$rn[0]."'>".$rn[1]." (".$rn[0].")</option>";
 	}		
     print "</select></td></tr>".
 	      "<tr><td width=200>Channel:</td><td width=300><input size=6 id='is_ch_".$row_sensor[0]."' value='".$row_sensor[4]."'></td></tr>".

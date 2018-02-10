@@ -5,7 +5,7 @@ function node_details($db,$node) {
 	print "<div ID=dn".$node." style='background: #AAAAAA; color: black; display: none;'>";
 	foreach ($db->query(" select node_id, node_name, add_info, sleeptime1, sleeptime2, sleeptime3, sleeptime4, radiomode, voltagedivider, battery_id, u_batt  ".
 						       " from node where node_id = '".$node."' ") as $row) { 
-		print "<center><table>".
+		print "<center><table border=0>".
 			  "<tr><td width=200>Nodename:</td><td width=300><input type='hidden' id='in_nid_".$node."' value='".$node."'><input size=23 id='in_nn_".$node."' value='".$row[1]."'></td></tr>".
 			  "<tr><td width=200>Nodeinfo:</td><td width=300><textarea id='in_ni_".$node."' height=175>".$row[2]."</textarea></td></tr>".
 			  "<tr><td width=200>Sleeptime1:</td><td width=300><input size=5 id='in_st1_".$node."' value='".$row[3]."'></td></tr>".
@@ -95,23 +95,23 @@ print "</select></td></tr>".
 print "<ul class='ui-listview ui-listview-inset ui-corner-all ui-shadow' data-inset='true' data-role='listview'>".
       "<li class='ui-li-divider ui-bar-inherit ui-first-child' data-role='list-divider' role='heading' ".
 	  "style='background: #111111; color: white;'></li>".
-	  "<li><a class='ui-btn ui-btn-icon-right ui-icon-carat-r ui-shadow' data-theme='a' ".
-	  " href='#' onclick=\"$('#sensoren').toggle();\" ".
+	  "<li><a id='senshead' class='ui-btn ui-btn-icon-right ui-icon-carat-r ui-shadow' data-theme='a' ".
+	  " href='#' onclick=\"enablesensor();\" ".
 	  " data-rel='popup' style='background: #666666; color: black; '><center>Sensoren editieren</center></a><div id='sensoren' style='display:none;'>";			  
 foreach ($sensorhub_db->query("select Sensor_id, Sensor_name, add_info, node_id, channel from sensor order by sensor_id") as $row_sensor) {   
-	print "<a class='ui-btn ui-btn-icon-right ui-icon-carat-r ui-shadow' data-theme='a' ".
-	      " href='#' onclick=\"$('#se".$row_sensor[0]."').toggle();\" ".
+	print "<a id='sa".$row_sensor[0]."' class='ui-btn ui-btn-icon-right ui-icon-carat-r ui-shadow' data-theme='a' ".
+	      " href='#' onclick=\"editsensor('".$row_sensor[0]."');\" ".
 	      " data-rel='popup' style='background: #AAAAAA; color: white;'>".$row_sensor[1]." (".$row_sensor[0].") </a>".
 		  "<div id='se".$row_sensor[0]."' style='display:none;'><center><table>".
 		  "<tr><td width=200>Sensornummer:</td><td width=300><input type=hidden id='is_sid_".$row_sensor[0]."'>".$row_sensor[0]."</td></tr>".
 		  "<tr><td width=200>Sensorname:</td><td width=300><input size=25 id='is_sn_".$row_sensor[0]."' value='".$row_sensor[1]."'></td></tr>".
 		  "<tr><td width=200>Sensorinfo:</td><td width=300><textarea id='is_si_".$row_sensor[0]."' height=175>".$row_sensor[2]."</textarea></td></tr>".		  
-		  "<tr><td width=200>Node_ID:</td><td width=300><select id='is_nid_".$row_sensor[0]."'>";
+		  "<tr><td width=200>Node (ID):</td><td width=300><select id='is_nid_".$row_sensor[0]."'>";
 	foreach ($sensorhub_db->query("select node_id, node_name from node where node_id = '".$row_sensor[3]."' ") as $rn) {
-        print "<option value='".$rn[0]."' selected>".$rn[1]."</option>";
+        print "<option value='".$rn[0]."' selected>".$rn[1]." (".$rn[0].")</option>";
 	}		
 	foreach ($sensorhub_db->query("select node_id, node_name from node where node_id != '".$row_sensor[3]."' ") as $rn) {
-        print "<option value='".$rn[0]."'>".$rn[1]."</option>";
+        print "<option value='".$rn[0]."'>".$rn[1]." (".$rn[0].")</option>";
 	}		
     print "</select></td></tr>".
 	      "<tr><td width=200>Channel:</td><td width=300><input size=6 id='is_ch_".$row_sensor[0]."' value='".$row_sensor[4]."'></td></tr>".
@@ -126,7 +126,7 @@ print "<a class='ui-btn ui-btn-icon-right ui-icon-carat-r ui-shadow' data-theme=
 	  "<tr><td width=200>Sensorinfo:</td><td width=300><textarea id='is_si_0'></textarea></td></tr>".
 	  "<tr><td width=200>Node_ID:</td><td width=300><select id='is_nid_0'>";
 foreach ($sensorhub_db->query("select node_id, node_name from node ") as $rn) {
-    print "<option value='".$rn[0]."'>".$rn[1]."</option>";
+    print "<option value='".$rn[0]."'>".$rn[1]." (".$rn[0].")</option>";
 }		
 print "</select></td></tr>".
 	  "<tr><td width=200>Channel:</td><td width=300><input size=6 id='is_ch_0'></td></tr>".
