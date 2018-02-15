@@ -15,9 +15,9 @@ if (isset($_GET["bid"])) { $bid=$_GET["bid"]; } else { $bid=0; }
 
 
 if ( $onid == 0 ) {
-	$sensorhub_db->query("insert into node (node_id, node_name, add_info, sleeptime1, sleeptime2, sleeptime3, sleeptime4, radiomode, voltagedivider, battery_id) ".
+	$sensorhub_db->query("insert into node (node_id, node_name, add_info, sleeptime1, sleeptime2, sleeptime3, sleeptime4, radiomode, voltagecorrection, battery_id) ".
 						 " values('".$nid."', '".$nn."', '".$ni."', ".$st1.", ".$st2.", ".$st3.", ".$st4.", ".$rm.", ".$vd.", ".$bid.") "); 
-	print "Neuen Node angelegt, NodeID: ".$nid." insert into node (node_id, node_name, add_info, sleeptime1, sleeptime2, sleeptime3, sleeptime4, radiomode, voltagedivider, battery_id) ".
+	print "Neuen Node angelegt, NodeID: ".$nid." insert into node (node_id, node_name, add_info, sleeptime1, sleeptime2, sleeptime3, sleeptime4, radiomode, voltagecorrection, battery_id) ".
 						 " values('".$nid."', '".$nn."', '".$ni."', ".$st1.", ".$st2.", ".$st3.", ".$st4.", ".$rm.", ".$vd.", ".$bid.") "; 
 } else {
 	$sensorhub_db->query(" update node set ".
@@ -28,9 +28,10 @@ if ( $onid == 0 ) {
 						"sleeptime3 = ".$st3.", ".
 						"sleeptime4 = ".$st4.", ".	
 						"radiomode = ".$rm.", ".
-						"voltagedivider = ".$vd.", ".
+						"voltagecorrection = ".$vd.", ".
 						"battery_id = ".$bid." ".
 						" where node_id = '".$onid."' "); 
 	print "Update erfolgt für NodeID: ".$onid;
 }					   
 ?>
+
