@@ -1,14 +1,3 @@
-<style type="text/css">
-table td{
-	border:1px solid black; 
-    vertical-align:center;
-    overflow:hidden; 
-	}
-table.noborder td.noborder {
-	border:0px solid black; 
-	}
-</style>
-
 <?php
 require_once("/sd_p2/web/php_inc/sensorhub.inc.php");
 
@@ -42,7 +31,13 @@ if (isset($_GET["page"]))  {
 
 if ( $sensor > 0 ) { 
 		$id=$sensor;
-}
+	foreach ($sensorhub_db->query("select sensor_id, sensor_name, type from sensor where sensor_id = ".$id." ") as $row) {
+		if ( $row[2] == "s" ) {
+			print "<center><b>Sensor: ".$row[1]." (".$row[0].") <br><br></b></center>";
+		} else {
+			print "<center><b>Actor: ".$row[1]." (".$row[0].") <br><br></b></center>";
+		}
+	}
 	echo "<table class=noborder><tr><td>".one_col($sensorhub_db,$page,$id);
     if ($num_col > 1) {
     	echo "</td><td>".one_col($sensorhub_db,$page+1,$id);
@@ -56,5 +51,9 @@ if ( $sensor > 0 ) {
     if ($num_col > 4) {
     	echo "</td><td>".one_col($sensorhub_db,$page+4,$id);
 	}
+    if ($num_col > 5) {
+    	echo "</td><td>".one_col($sensorhub_db,$page+5,$id);
+	}
 	echo "</td></tr></table>";
+}
 ?>

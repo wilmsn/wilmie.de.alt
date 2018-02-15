@@ -60,17 +60,20 @@ function savesensor(mysensorid){
 	mysi=$('#is_si_'+mysensorid).val();
 	mynid=$('#is_nid_'+mysensorid).val();
 	mych=$('#is_ch_'+mysensorid).val();
-	$.get(mydir+'/savesensor.php',{osid: mysensorid, sid: mysid, sn: mysn, si: mysi, nid: mynid, ch: mych }, function(data) { 
+	myty=$('#is_ty_'+mysensorid).val();
+	$.get(mydir+'/savesensor.php',{osid: mysensorid, sid: mysid, sn: mysn, si: mysi, nid: mynid, ch: mych, ty: myty }, function(data) { 
 		alert(data);
 	});
 }
+
 function showsensor(mysensor) {
-    // alert(width);
+//     alert(width);
 	if (width < 450) { mynum_col=1; } else { 
 		if (width < 650) { mynum_col=2; } else {
 			if (width < 900) { mynum_col=3;} else { 
-				if (width < 1150) { mynum_col=4;} else { mynum_col=5; }
-	}	}   } 
+				if (width < 1150) { mynum_col=4;} else { 
+					if (width < 1400) { mynum_col=5;} else { mynum_col=6; }
+	}	}   }   }
 	$.get(mydir+'/sensoren_pages.php',{sensor: mysensor, num_col: mynum_col }, function(data) { 
 		$('#mypages').val(data);
 		$("#myslider1").attr("max", data).attr("min", 0).val(0).slider('refresh');
@@ -83,7 +86,8 @@ function showsensor(mysensor) {
 }
 
 function showresult(mysensor, mypage) {
-	$("#myslider1").val(mypage).slider();
+	$("#myslider1").val(mypage);
+	$("#myslider1").slider('refresh');
 	mynum_col=$('#mynum_col').val();
 	htmllinks1="<table class=noborder><tr><td class=noborder>";
 	if (mypage == 0) { 
@@ -92,9 +96,9 @@ function showresult(mysensor, mypage) {
 	    prevpage = (mypage*1)-1;
 		htmllinks2="<a href='#' onclick='showresult("+mysensor+","+prevpage+");'><img src='/img/arrow_left.gif' height='100' width='40'></a>";
 	}	
-	htmllinks3="</td><td>";
+	htmllinks3="</td><td class=noborder>";
 	htmlrechts1="</td><td class=noborder>";
-    if (mypage >= $('#mypages').val() ) {
+    if ((mypage*1) >= ($('#mypages').val()*1) ) {
 		htmlrechts2="<img src='/img/arrow_right_e.gif' height='100' width='40'>";
 	} else {
 		nextpage = (mypage*1)+1;
@@ -114,11 +118,6 @@ $(document).ready(function(){
 	$('#node').hide();
     $('#details_ctl').hide();
 	shownodes();
-	$('#save_02').click(function(){
-		$('#save_02').hide();
-		alert('cc');
-	});
-	
 	$('#zeigliste').click(function(){
 		$('#liste').show();
 		$('#node').hide();
@@ -146,7 +145,11 @@ $(document).ready(function(){
 				if (width < 1150) {
 					$('#details').css('width', '880');
 				} else {	
-					$('#details').css('width', '1100');
+					if (width < 1400) {
+						$('#details').css('width', '1090');
+					} else {	
+						$('#details').css('width', '1300');
+					}
 				}
 			}
 		}
@@ -158,13 +161,24 @@ $(document).ready(function(){
 </script>
 <style type=text/css>
     div.ui-slider{
-		width:85%;
+		width:87%;
 		left: -30px;
 	}
     input.ui-slider-input {
 		width: 0;
 		display: none;
     }
+	table td{
+		border:1px solid black; 
+		vertical-align:center;
+		overflow:hidden; 
+	}
+	table.noborder td.noborder {
+		border:0px solid black; 
+	}
+	noborder {
+		border:0px solid black; 
+	}
 </style>
 
 	<div data-role="main" class="ui-content">
