@@ -30,15 +30,17 @@ if (isset($_GET["page"]))  {
 }
 
 if ( $sensor > 0 ) { 
-		$id=$sensor;
+	$id=$sensor;
+	print "<center>&nbsp<b>";
 	foreach ($sensorhub_db->query("select sensor_id, sensor_name, type from sensor where sensor_id = ".$id." ") as $row) {
 		if ( $row[2] == "s" ) {
-			print "<center><b>Sensor: ".$row[1]." (".$row[0].") <br><br></b></center>";
+			print "Sensor: <br>".$row[1]." (".$row[0].")";
 		} else {
-			print "<center><b>Actor: ".$row[1]." (".$row[0].") <br><br></b></center>";
+			print "Actor:  <br>".$row[1]." (".$row[0].")";
 		}
 	}
-	echo "<table class=noborder><tr><td>".one_col($sensorhub_db,$page,$id);
+	echo "</b></center>".
+		 "<center>&nbsp;<table class=noborder><tr><td>".one_col($sensorhub_db,$page,$id);
     if ($num_col > 1) {
     	echo "</td><td>".one_col($sensorhub_db,$page+1,$id);
 	}
@@ -54,6 +56,6 @@ if ( $sensor > 0 ) {
     if ($num_col > 5) {
     	echo "</td><td>".one_col($sensorhub_db,$page+5,$id);
 	}
-	echo "</td></tr></table>";
+	echo "</td></tr></table>&nbsp;</center>"; 
 }
 ?>

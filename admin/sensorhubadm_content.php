@@ -67,19 +67,11 @@ function savesensor(mysensorid){
 }
 
 function showsensor(mysensor) {
-//     alert(width);
-	if (width < 450) { mynum_col=1; } else { 
-		if (width < 650) { mynum_col=2; } else {
-			if (width < 900) { mynum_col=3;} else { 
-				if (width < 1150) { mynum_col=4;} else { 
-					if (width < 1400) { mynum_col=5;} else { mynum_col=6; }
-	}	}   }   }
 	$.get(mydir+'/sensoren_pages.php',{sensor: mysensor, num_col: mynum_col }, function(data) { 
 		$('#mypages').val(data);
 		$("#myslider1").attr("max", data).attr("min", 0).val(0).slider('refresh');
 	});
     $('#mysensor').val(mysensor);
-	$('#mynum_col').val(mynum_col);
 	showresult(mysensor, 0);
 	$('#liste').hide();	
     $('#details_ctl').show();
@@ -89,7 +81,7 @@ function showresult(mysensor, mypage) {
 	$("#myslider1").val(mypage);
 	$("#myslider1").slider('refresh');
 	mynum_col=$('#mynum_col').val();
-	htmllinks1="<table class=noborder><tr><td class=noborder>";
+	htmllinks1="<center><table class=noborder><tr><td class=noborder>";
 	if (mypage == 0) { 
 		htmllinks2="<img src='/img/arrow_left_e.gif'  height='100' width='40'>";
     } else {
@@ -104,7 +96,7 @@ function showresult(mysensor, mypage) {
 		nextpage = (mypage*1)+1;
 		htmlrechts2="<a href='#' onclick='showresult("+mysensor+","+nextpage+");'><img src='/img/arrow_right.gif' height='100' width='40'></a>";
 	}	
-	htmlrechts3="</td></tr></table>";
+	htmlrechts3="</td></tr></table></center>";
 	$.get(mydir+'/sensoren_detail.php',{sensor: mysensor, page: mypage, num_col: mynum_col }, function(data) { 
 		$('#details').hide();
 		$('#details').html(htmllinks1+htmllinks2+htmllinks3+data+htmlrechts1+htmlrechts2+htmlrechts3); 
@@ -133,27 +125,34 @@ $(document).ready(function(){
 	$('#myslider1').on('slidestop',function(){
 		showresult($('#mysensor').val(),$("#myslider1").val());
 	});	
-	if (width < 400) {
-		$('#details').css('width', '290');
+	if (width < 450) {
+		$('#details').css('width', '90%');
+		mynum_col=1;
 	} else {
 		if (width < 650) {
-			$('#details').css('width', '480');
+			$('#details').css('width', '90%');
+			mynum_col=2;
 		} else {
 			if (width < 900) {
-				$('#details').css('width', '670');
+				$('#details').css('width', '90%');
+				mynum_col=3;
 			} else {
-				if (width < 1150) {
-					$('#details').css('width', '880');
+				if (width < 1100) {
+					$('#details').css('width', '90%');
+					mynum_col=4;
 				} else {	
-					if (width < 1400) {
-						$('#details').css('width', '1090');
+					if (width < 1200) {
+						$('#details').css('width', '90%');
+						mynum_col=5;
 					} else {	
-						$('#details').css('width', '1300');
+						$('#details').css('width', '1200');
+						mynum_col=6;
 					}
 				}
 			}
 		}
 	}
+	$('#mynum_col').val(mynum_col);
 //alert(width);
   $('#myslider1').slider();
 });
@@ -161,8 +160,8 @@ $(document).ready(function(){
 </script>
 <style type=text/css>
     div.ui-slider{
-		width:87%;
-		left: -30px;
+		width:97%;
+		left: -55px;
 	}
     input.ui-slider-input {
 		width: 0;
@@ -182,7 +181,6 @@ $(document).ready(function(){
 </style>
 
 	<div data-role="main" class="ui-content">
-		<p id="erg"></p>
 		<div id="liste">
 		</div>
         <div id="details" style="margin : 0 auto;">
