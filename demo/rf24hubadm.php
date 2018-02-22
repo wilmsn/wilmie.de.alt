@@ -1,10 +1,10 @@
 <script>
 
 var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
-var mydir = '/admin';
+var mydir = '/demo';
 
 function shownodes() {
-	$.get(mydir+'/sensoren_list.php', function(data) { 
+	$.get(mydir+'/rf24hubadm_list.php', function(data) { 
 		$('#liste').hide();
 		$('#liste').html(data); 
 		$('#liste').show();
@@ -67,7 +67,7 @@ function savesensor(mysensorid){
 }
 
 function showsensor(mysensor) {
-	$.get(mydir+'/sensoren_pages.php',{sensor: mysensor, num_col: mynum_col }, function(data) { 
+	$.get(mydir+'/rf24hubadm_pages.php',{sensor: mysensor, num_col: mynum_col }, function(data) { 
 		$('#mypages').val(data);
 		$("#myslider1").attr("max", data).attr("min", 0).val(0).slider('refresh');
 	});
@@ -97,7 +97,7 @@ function showresult(mysensor, mypage) {
 		htmlrechts2="<a href='#' onclick='showresult("+mysensor+","+nextpage+");'><img src='/img/arrow_right.gif' height='100' width='40'></a>";
 	}	
 	htmlrechts3="</td></tr></table></center>";
-	$.get(mydir+'/sensoren_detail.php',{sensor: mysensor, page: mypage, num_col: mynum_col }, function(data) { 
+	$.get(mydir+'/rf24hubadm_detail.php',{sensor: mysensor, page: mypage, num_col: mynum_col }, function(data) { 
 		$('#details').hide();
 		$('#details').html(htmllinks1+htmllinks2+htmllinks3+data+htmlrechts1+htmlrechts2+htmlrechts3); 
 		$('#details').show();

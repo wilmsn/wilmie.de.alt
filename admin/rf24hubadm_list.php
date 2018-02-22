@@ -1,9 +1,9 @@
 <?php
-require_once("/sd_p2/web/php_inc/sensorhubdemo.inc.php");
+require_once("/sd_p2/web/php_inc/sensorhub.inc.php");
 
 function node_details($db,$node) {
 	print "<div ID=dn".$node." style='background: #AAAAAA; color: black; display: none;'>";
-	$sql = " select node_id, node_name, add_info, sleeptime1, sleeptime2, sleeptime3, sleeptime4, radiomode, voltagecorrection, battery_id, u_batt from node where node_id = '".$node."' ";
+	$sql = " select node_id, node_name, add_info, sleeptime1, sleeptime2, sleeptime3, sleeptime4, radiomode, voltagefactor, battery_id, u_batt from node where node_id = '".$node."' ";
 	foreach ( $db->query($sql) as $row) { 
 		print "<center><table border=0>".
 			  "<tr><td width=200>Nodename:</td><td width=300><input type='hidden' id='in_nid_".$node."' value='".$node."'><input size=23 id='in_nn_".$node."' value='".$row[1]."'></td></tr>".
@@ -19,7 +19,7 @@ function node_details($db,$node) {
 				print "<option value=0>Radio sleeps</option><option value=1 selected>Radio on</option>";
 			}				  
 		print "</select></td></tr>".	  
-			  "<tr><td width=200>Voltagecorrection:</td><td width=300><input size=5 id='in_vd_".$node."' value='".$row[8]."'></td></tr>".
+			  "<tr><td width=200>voltagefactor:</td><td width=300><input size=5 id='in_vd_".$node."' value='".$row[8]."'></td></tr>".
 			  "<tr><td width=200>Battery:</td><td width=300><select id='in_bid_".$node."'>";
 		foreach ($db->query(" select battery_id, battery_sel_txt from battery where battery_id = '".$row[9]."' ") as $bat_row) { 
 				print "<option value=".$bat_row[0]." selected>".$bat_row[1]."</option>";
@@ -98,7 +98,7 @@ print "<ul class='ui-listview ui-listview-inset ui-corner-all ui-shadow' data-in
 	  "<li><a id='senshead' class='ui-btn ui-btn-icon-right ui-icon-carat-r ui-shadow' data-theme='a' ".
 	  " href='#' onclick=\"enablesensor();\" ".
 	  " data-rel='popup' style='background: #666666; color: black; '><center>Sensoren editieren</center></a><div id='sensoren' style='display:none;'>";			  
-foreach ($sensorhub_db->query("select Sensor_id, Sensor_name, add_info, node_id, channel from sensor order by sensor_id") as $row_sensor) {   
+foreach ($sensorhub_db->query("select Sensor_id, Sensor_name, add_info, node_id, channel, type from sensor order by sensor_id") as $row_sensor) {   
 	print "<a id='sa".$row_sensor[0]."' class='ui-btn ui-btn-icon-right ui-icon-carat-r ui-shadow' data-theme='a' ".
 	      " href='#' onclick=\"editsensor('".$row_sensor[0]."');\" ".
 	      " data-rel='popup' style='background: #AAAAAA; color: white;'>".$row_sensor[1]." (".$row_sensor[0].") </a>".
@@ -115,6 +115,13 @@ foreach ($sensorhub_db->query("select Sensor_id, Sensor_name, add_info, node_id,
 	}		
     print "</select></td></tr>".
 	      "<tr><td width=200>Channel:</td><td width=300><input size=6 id='is_ch_".$row_sensor[0]."' value='".$row_sensor[4]."'></td></tr>".
+	      "<tr><td width=200>Typ:</td><td width=300><select id='is_ty_".$row_sensor[0]."' >";
+	if ( $row_sensor[5] == "s" ) {
+		print "<option value='s' selected>Sensor</option><option value='a'>Actor</option>";
+	} else {
+		print "<option value='s'>Sensor</option><option value='a' selected>Actor</option>";
+	}
+	print "</select></td></tr>".
 		  "</table><button class='ui-btn' onclick='savesensor(".$row_sensor[0].")'>Werte speichern</button></center></div>";
 }	
 print "<a class='ui-btn ui-btn-icon-right ui-icon-carat-r ui-shadow' data-theme='a' ".
@@ -130,7 +137,11 @@ foreach ($sensorhub_db->query("select node_id, node_name from node ") as $rn) {
 }		
 print "</select></td></tr>".
 	  "<tr><td width=200>Channel:</td><td width=300><input size=6 id='is_ch_0'></td></tr>".
+	  "<tr><td width=200>Typ:</td><td width=300><select id='is_ty_0' >".
+	  "<option value='s' selected>Sensor</option><option value='a'>Actor</option>".
+      "</select></td></tr>".
 	  "</table><button class='ui-btn' onclick='savesensor(0)'>Werte speichern</button></center></div>".
 	  "</div><li class='ui-li-divider ui-bar-inherit ui-last-child' data-role='list-divider' role='heading'></li></ul>";	
 	
 ?>
+

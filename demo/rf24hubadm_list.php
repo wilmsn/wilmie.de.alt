@@ -1,9 +1,9 @@
 <?php
-require_once("/sd_p2/web/php_inc/sensorhub.inc.php");
+require_once("/sd_p2/web/php_inc/sensorhubdemo.inc.php");
 
 function node_details($db,$node) {
 	print "<div ID=dn".$node." style='background: #AAAAAA; color: black; display: none;'>";
-	$sql = " select node_id, node_name, add_info, sleeptime1, sleeptime2, sleeptime3, sleeptime4, radiomode, voltagecorrection, battery_id, u_batt from node where node_id = '".$node."' ";
+	$sql = " select node_id, node_name, add_info, sleeptime1, sleeptime2, sleeptime3, sleeptime4, radiomode, voltagefactor, battery_id, u_batt from node where node_id = '".$node."' ";
 	foreach ( $db->query($sql) as $row) { 
 		print "<center><table border=0>".
 			  "<tr><td width=200>Nodename:</td><td width=300><input type='hidden' id='in_nid_".$node."' value='".$node."'><input size=23 id='in_nn_".$node."' value='".$row[1]."'></td></tr>".
@@ -19,7 +19,7 @@ function node_details($db,$node) {
 				print "<option value=0>Radio sleeps</option><option value=1 selected>Radio on</option>";
 			}				  
 		print "</select></td></tr>".	  
-			  "<tr><td width=200>Voltagecorrection:</td><td width=300><input size=5 id='in_vd_".$node."' value='".$row[8]."'></td></tr>".
+			  "<tr><td width=200>voltagefactor:</td><td width=300><input size=5 id='in_vd_".$node."' value='".$row[8]."'></td></tr>".
 			  "<tr><td width=200>Battery:</td><td width=300><select id='in_bid_".$node."'>";
 		foreach ($db->query(" select battery_id, battery_sel_txt from battery where battery_id = '".$row[9]."' ") as $bat_row) { 
 				print "<option value=".$bat_row[0]." selected>".$bat_row[1]."</option>";
