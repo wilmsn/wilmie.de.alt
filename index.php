@@ -32,31 +32,24 @@ if ( isset($_COOKIE["PASSWD"]) ) {
     $passwd=$_COOKIE["PASSWD"];
 }
 if ($email != "" && $passwd != "") {
-	$login_msg="test1";
 	session_start();
     $session_started=true;
     $statement = $www_db->prepare("SELECT * FROM users WHERE email = :email");
     $result = $statement->execute(array('email' => $email));
     $user = $statement->fetch();
-if ($user !== false) {	
-    $login_msg=$login_msg." User OK";    
-}
-if (password_verify($passwd, $passwd)) {	
-    $login_msg=$login_msg." Passwd OK";    
-}
     //Überprüfung des Passworts
     if ($user !== false && password_verify($passwd, $user['passwort'])) {
         $_SESSION['userid'] = $user['id'];
+//    !!!!! Muss überarbeitet werden !!!!!!
 //        die('Login erfolgreich. Weiter zu <a href="/">internen Bereich</a>');
-		if(isset($_POST['angemeldet_bleiben'])) {
-			$identifier = random_string();
-			$securitytoken = random_string();				
-			$insert = $www_db->prepare("INSERT INTO securitytokens (user_id, identifier, securitytoken) VALUES (:user_id, :identifier, :securitytoken)");
-			$insert->execute(array('user_id' => $user['id'], 'identifier' => $identifier, 'securitytoken' => sha1($securitytoken)));
-			setcookie("identifier",$identifier,time()+(3600*24*365)); //Valid for 1 year
-			setcookie("securitytoken",$securitytoken,time()+(3600*24*365)); //Valid for 1 year
-		}
-		$login_msg=$login_msg."Login erfolgreich";
+//		if(isset($_POST['angemeldet_bleiben'])) {
+//			$identifier = random_string();
+//			$securitytoken = random_string();				
+//			$insert = $www_db->prepare("INSERT INTO securitytokens (user_id, identifier, securitytoken) VALUES (:user_id, :identifier, :securitytoken)");
+//			$insert->execute(array('user_id' => $user['id'], 'identifier' => $identifier, 'securitytoken' => sha1($securitytoken)));
+//			setcookie("identifier",$identifier,time()+(3600*24*365)); //Valid for 1 year
+//			setcookie("securitytoken",$securitytoken,time()+(3600*24*365)); //Valid for 1 year
+//		}
 		$login=true;
 		$sql_show = "role in ('+', 'a')";
     } else {
@@ -70,9 +63,6 @@ if ( isset($_COOKIE["PHPSESSID"]) ) {
 }
 if ( ($cookie_ok && ! $logout) || $login ) { 
 	if ( ! $session_started ) session_start();
-//	require_once("/sd_p2/web/php_inc/config.inc.php");
-//	require_once("/sd_p2/web/php_inc/functions.inc.php");
-//	require_once("/sd_p2/web/php_inc/check_mobile.php");
 	$vorname="";
 	$nachname="";
 	$userid="";
@@ -160,7 +150,6 @@ function logout() {
 }
  
 function refreshPage() {
-//	alert(window.location.href);	
 	$("#loadPage").html(" ");
 	$.mobile.changePage("#loadPage");
 	$("#homePage").html(" ");
@@ -229,6 +218,7 @@ $('#home').append("<div data-role='panel' id='menu_panel' data-theme='a' data-di
 ?>				  
 <?php if( $is_loged_in ) : ?>
 	$('#menu_panel').append("<a href='#' onclick='logout();' data-role='button' data-theme='a' >abmelden</a>");
+	$('#myheadline').html("wilmie.de  ("+vorname+" "+nachname+")");
 	eraseCookie("EMAIL");
 	eraseCookie("PASSWD");
 <?php else: ?>
@@ -238,7 +228,7 @@ $('#home').append("<div data-role='panel' id='menu_panel' data-theme='a' data-di
 						  "E-Mail:<br><input id='email' type='email' size='31' maxlength='250' name='email'><br>"+
 						  "Passwort:<br><input id='passwd' type='password' size='31'  maxlength='250' name='passwort'><br>"+
 						  "<a href='#' onclick='login();' data-role='button' data-theme='a' >anmelden</a></fieldset>");
-
+	$('#myheadline').html("wilmie.de  "+login_msg+"");
 <?php endif; ?>	
 
 
@@ -270,7 +260,6 @@ $(document).ready(function(){
 	$('#head').append("<div id='head_info'></div>");
     $('#head').append("<img src=/img/wilmie.png border=0><img src=/img/headline_pics.png border=0>"); 
     $('#menu').append("<div id='cssmenu'><ul id='mymenu'></ul></div>");
-//	$('#mymenu').append(" "
 <?php		
 # Step 1: Add Entries on Main Menu (Level 1)
 	$sql="select menu1_id, menu2_id, menu3_id, class_dt, label, has_sub, url, bookmark, content from menu "
@@ -335,11 +324,9 @@ $(document).ready(function(){
 <?php endif; ?>	
    $('#email').click(function() {
 	   $('#loginbox').css('display', 'block');
-//	   alert('click');
    });
    $('#passwd').click(function() {
 	   $('#loginbox').css('display', 'block');
-//	   alert('click');
    });
 
 $('#mymenu').append("<li class='hidden' id='bmme'><a href='#'>&nbsp;</a></li>");
@@ -382,7 +369,6 @@ function getcontent(mypage,myurlx) {
 }
 
 function bookmarkurl() {
-       //alert(location.protocol + '//' + location.host + '/' + myurl);
        top.location.href=location.protocol + '//' + location.host + '/' +  myurl;
 }
 
