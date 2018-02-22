@@ -3,41 +3,51 @@
  
 <head>
 <?php
-session_start();
 require_once("/sd_p2/web/php_inc/config.inc.php");
 require_once("/sd_p2/web/php_inc/functions.inc.php");
 require_once("/sd_p2/web/php_inc/check_mobile.php");
 $vorname="";
 $nachname="";
 $userid="";
+$logout=false;
+$login=false;
+$is_loged_in=false;
+$session_started=false;
+$login_msg="";
+$cookie_msg="";
+$cookie_ok=false; 
+$email="";
+$passwd="";
+$sql_show = "role in ('+', '-')";
 
 $login_msg = "";
 $reload_needed = "";
 
-if (isset($_POST['abmelden'])) {
-	$abmelden = $_POST['abmelden'];
-	if ( $abmelden == 'ja' ) {
-		session_destroy();
-		unset($_SESSION['userid']);
-		//Remove Cookies
-		setcookie("identifier","",time()-(3600*24*365)); 
-		setcookie("securitytoken","",time()-(3600*24*365)); 
-		$login_msg = "abgemeldet!";
-		$reload_needed = "ja";
-		#die("abgemeldet!"); 
-	}
-}	
+$is_mobile_browser=is_mobile_browser();
 
-if (isset($_POST['email']) && isset($_POST['passwort'])) {
-	$email = $_POST['email'];
-	$passwort = $_POST['passwort'];
-	$statement = $www_db->prepare("SELECT * FROM users WHERE email = :email");
-	$result = $statement->execute(array('email' => $email));
-	$user = $statement->fetch();
-	//Überprüfung des Passworts
-	if ($user !== false && password_verify($passwort, $user['passwort'])) {
-		$_SESSION['userid'] = $user['id'];
-		//Möchte der Nutzer angemeldet beleiben?
+if ( isset($_COOKIE["EMAIL"]) ) {
+    $email=$_COOKIE["EMAIL"];
+}
+if ( isset($_COOKIE["PASSWD"]) ) {
+    $passwd=$_COOKIE["PASSWD"];
+}
+if ($email != "" && $passwd != "") {
+	$login_msg="test1";
+	session_start();
+    $session_started=true;
+    $statement = $www_db->prepare("SELECT * FROM users WHERE email = :email");
+    $result = $statement->execute(array('email' => $email));
+    $user = $statement->fetch();
+if ($user !== false) {	
+    $login_msg=$login_msg." User OK";    
+}
+if (password_verify($passwd, $passwd)) {	
+    $login_msg=$login_msg." Passwd OK";    
+}
+    //Überprüfung des Passworts
+    if ($user !== false && password_verify($passwd, $user['passwort'])) {
+        $_SESSION['userid'] = $user['id'];
+//        die('Login erfolgreich. Weiter zu <a href="/">internen Bereich</a>');
 		if(isset($_POST['angemeldet_bleiben'])) {
 			$identifier = random_string();
 			$securitytoken = random_string();				
@@ -46,52 +56,39 @@ if (isset($_POST['email']) && isset($_POST['passwort'])) {
 			setcookie("identifier",$identifier,time()+(3600*24*365)); //Valid for 1 year
 			setcookie("securitytoken",$securitytoken,time()+(3600*24*365)); //Valid for 1 year
 		}
-		$reload_needed = "ja";
-	} else {
-		$login_msg =  "(Login fehlerhaft)";
-	}
+		$login_msg=$login_msg."Login erfolgreich";
+		$login=true;
+		$sql_show = "role in ('+', 'a')";
+    } else {
+        $login_msg=$login_msg."E-Mail oder Passwort war ungültig";
+    }
 }
 
-if (!is_checked_in()) {
-	if ( isset($_COOKIE['identifier']) && isset($_COOKIE['securitytoken']) ) {
-		$identifier = $_COOKIE['identifier'];
-		$securitytoken = $_COOKIE['securitytoken'];
-		$statement = $www_db->prepare("SELECT * FROM securitytokens WHERE identifier = ?");
-		$result = $statement->execute(array($identifier));
-		$securitytoken_row = $statement->fetch();
-		if(sha1($securitytoken) !== $securitytoken_row['securitytoken']) {
-			die('Ein vermutlich gestohlener Security Token wurde identifiziert');
-		} else { //Token war korrekt 
-			//Setze neuen Token
-			$neuer_securitytoken = random_string(); 
-			$insert = $www_db->prepare("UPDATE securitytokens SET securitytoken = :securitytoken, used_at = CURRENT_TIMESTAMP WHERE identifier = :identifier");
-			$insert->execute(array('securitytoken' => sha1($neuer_securitytoken), 'identifier' => $identifier));
-			setcookie("identifier",$identifier,time()+(3600*24*365)); //1 Jahr Gültigkeit
-			setcookie("securitytoken",$neuer_securitytoken,time()+(3600*24*365)); //1 Jahr Gültigkeit
-			//Logge den Benutzer ein
-			$_SESSION['userid'] = $securitytoken_row['user_id'];
-		}
-		$reload_needed = "ja";
-	}		
-}	
-
-if (is_checked_in()) {
-	$user = check_user();
-	$vorname = htmlentities($user['vorname']);
-	$nachname = htmlentities($user['nachname']);
-	$userid = htmlentities($user['id']);
-	$angemeldet = 'ja';
-	$sql_show = "role in ('+', 'a')";
-} else {	
-	$angemeldet = 'nein';
-	$sql_show = "role in ('+', '-')";
-}	
-
+if ( isset($_COOKIE["PHPSESSID"]) ) {
+    if ( $_COOKIE["PHPSESSID"] != "" ) { $cookie_ok = true; }
+	$cookie_msg="Cookie gesetzt: ".$_COOKIE["PHPSESSID"]."<hr>";
+}
+if ( ($cookie_ok && ! $logout) || $login ) { 
+	if ( ! $session_started ) session_start();
+//	require_once("/sd_p2/web/php_inc/config.inc.php");
+//	require_once("/sd_p2/web/php_inc/functions.inc.php");
+//	require_once("/sd_p2/web/php_inc/check_mobile.php");
+	$vorname="";
+	$nachname="";
+	$userid="";
+	if(is_checked_in()) {
+		$user = check_user();
+		$vorname = htmlentities($user['vorname']);
+		$nachname = htmlentities($user['nachname']);
+		$userid = htmlentities($user['id']);
+		$is_loged_in=true;
+	}
+}
 
 $urlPart = explode("/", $_SERVER['REQUEST_URI']);
 if ( $urlPart[1] == "") { $urlPart[1]="-"; } 
 
-if(is_mobile_browser()) { 
+if( $is_mobile_browser ) { 
   echo "<title>wilmie.de mobile</title>\n";
 } else { 
   echo "<title>wilmie.de</title>\n";
@@ -118,15 +115,70 @@ if (top!=self) top.location.href=self.location.href;
  var vorname='<?php echo $vorname; ?>'; 
  var nachname='<?php echo $nachname; ?>'; 
  var userid='<?php echo $userid; ?>'; 
- var angemeldet='<?php echo $angemeldet; ?>'; 
  var login_msg='<?php echo $login_msg; ?>'; 
-<?php
-if ($reload_needed == "ja") {
-	echo "window.location.reload(true);\n";	
+ 
+function createCookie(name, value, days) {
+    var expires;
+
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toGMTString();
+    } else {
+        expires = "";
+    }
+    document.cookie = encodeURIComponent(name) + "=" + encodeURIComponent(value) + expires + "; path=/";
 }
 
-?>
-<?php if(is_mobile_browser()): ?>
+function readCookie(name) {
+    var nameEQ = encodeURIComponent(name) + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) === ' ')
+            c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0)
+            return decodeURIComponent(c.substring(nameEQ.length, c.length));
+    }
+    return null;
+}
+
+function eraseCookie(name) {
+    createCookie(name, "", -1);
+}
+ 
+function login() {
+		createCookie('EMAIL',$('#email').val(),1);
+		createCookie('PASSWD',$('#passwd').val(),1);
+	    refreshPage();
+}
+function logout() {
+		eraseCookie('EMAIL');
+		eraseCookie('PASSWD');
+		eraseCookie('PHPSESSID');
+	    refreshPage();
+}
+ 
+function refreshPage() {
+//	alert(window.location.href);	
+	$("#loadPage").html(" ");
+	$.mobile.changePage("#loadPage");
+	$("#homePage").html(" ");
+	$.mobile.changePage("#homePage");  
+	$.mobile.changePage(
+		window.location.href, {
+			allowSamePageTransition : true,
+			transition              : 'none',
+			showLoadMsg             : false,
+			reloadPage              : true
+		}
+	);
+	getcontent('/content/info_content.php','info');
+	top.location.href=location.protocol + '//' + location.host + '/' +  'index.php';
+}
+ 
+ 
+<?php if( $is_mobile_browser ): ?>
  var info='info'; 
  var infourl='/main.php'; 
  var wetter='wetter'; 
@@ -174,13 +226,22 @@ $('#home').append("<div data-role='panel' id='menu_panel' data-theme='a' data-di
 			}	
 		}		
 	}	
-	
 ?>				  
-if ( angemeldet == 'ja' ) {
-	$('#myheadline').html("wilmie.de  ("+vorname+" "+nachname+")");
-} else {
-	$('#myheadline').html("wilmie.de"+login_msg+"");
-}
+<?php if( $is_loged_in ) : ?>
+	$('#menu_panel').append("<a href='#' onclick='logout();' data-role='button' data-theme='a' >abmelden</a>");
+	eraseCookie("EMAIL");
+	eraseCookie("PASSWD");
+<?php else: ?>
+	$('#menu_panel').append("<a href='#panel_am' data-role='button' data-theme='a' >anmelden</a>");
+	$('#home').append("<div data-role='panel' id='panel_am' data-theme='a' data-display='overlay' data-position='left'>Anmelden</div>");
+	$('#panel_am').append("<br><fieldset>"+
+						  "E-Mail:<br><input id='email' type='email' size='31' maxlength='250' name='email'><br>"+
+						  "Passwort:<br><input id='passwd' type='password' size='31'  maxlength='250' name='passwort'><br>"+
+						  "<a href='#' onclick='login();' data-role='button' data-theme='a' >anmelden</a></fieldset>");
+
+<?php endif; ?>	
+
+
 
 });
 
@@ -198,20 +259,11 @@ function close_menu() {
 
 $(document).ready(function(){
 
-
-
-
-
-
-
-
-
-
-
-
-<?php else: ?>
-
-// Desktop;;;;
+<?php 
+// End mobile Browser
+else: 
+// Start Desktop Browser
+?>
 
 $(document).ready(function(){
 	$('#home').append("<div id='wrapper'><div id='head'></div><div id='menu' class='menu'></div><div id='main'><div id='content'></div></div></div>");
@@ -273,11 +325,24 @@ $(document).ready(function(){
 		}			
 	}	
 ?>	
+<?php if( $is_loged_in ) : ?>
+	$('#mymenu').append("<li class='has_sub'><a href='#'><span>Logout</span></a><ul><li><button id='logoutbut' class='ui-btn ui-shadow ui-corner-all' onclick='logout();'> Abmelden</button></li></ul></li>");
+<?php else: ?>
+	$('#mymenu').append("<li class='has_sub'><a href='#'><span>Login</span></a><ul id='loginbox'><li>"+
+						"E-Mail:<br><input id='email' type='email' size='31' maxlength='250' name='email'><br>"+
+						"Passwort:<br><input id='passwd' type='password' size='31'  maxlength='250' name='passwort'><br>"+
+						"<button id='loginbut' class=' ui-btn ui-shadow ui-corner-all' onclick='login();'> Anmelden</button></li></ul></li>");
+<?php endif; ?>	
+   $('#email').click(function() {
+	   $('#loginbox').css('display', 'block');
+//	   alert('click');
+   });
+   $('#passwd').click(function() {
+	   $('#loginbox').css('display', 'block');
+//	   alert('click');
+   });
 
 $('#mymenu').append("<li class='hidden' id='bmme'><a href='#'>&nbsp;</a></li>");
-if ( angemeldet == 'ja' ) {	
-	$('#head_info').append('Angemeldet als:<br>'+vorname+' '+nachname).css('background-color','#aaaaaa');
-}
 
 <?php endif; ?>		
 
