@@ -257,11 +257,10 @@ $('#home').append("<div data-role='panel' id='menu_panel' data-theme='a' data-di
 	$('#panel_am').append("<br><fieldset>"+
 						  "E-Mail:<br><input id='email' type='email' size='31' maxlength='250' name='email'><br>"+
 						  "Passwort:<br><input id='passwd' type='password' size='31'  maxlength='250' name='passwort'><br>"+
-						  "<a href='#' onclick='login();' data-role='button' data-theme='a' >anmelden</a></fieldset>");
+						  "<div><label><input id='rememberme'  data-theme='b' type='checkbox' name='angemeldet_bleiben' value='1' checked> "+
+						  "Angemeldet bleiben </label></div><a href='#' onclick='login();' data-role='button' data-theme='a' >anmelden</a></fieldset>");
 	$('#myheadline').html("wilmie.de  "+login_msg+"");
 <?php endif; ?>	
-
-
 
 });
 

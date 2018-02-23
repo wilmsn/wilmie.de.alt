@@ -198,6 +198,11 @@ $(document).ready(function(){
 		vertical-align:center;
 		overflow:hidden; 
 	}
+	table th{
+		border:1px solid black; 
+		vertical-align:center;
+		overflow:hidden; 
+	}
 	table.noborder td.noborder {
 		border:0px solid black; 
 	}
