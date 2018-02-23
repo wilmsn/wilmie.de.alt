@@ -143,5 +143,16 @@ print "</select></td></tr>".
 	  "</table><button class='ui-btn' onclick='savesensor(0)'>Werte speichern</button></center></div>".
 	  "</div><li class='ui-li-divider ui-bar-inherit ui-last-child' data-role='list-divider' role='heading'></li></ul>";	
 	
-?>
+#######################
+#
+# offene Jobs auflisten
+#
+#######################
+print "<ul class='ui-listview ui-listview-inset ui-corner-all ui-shadow' data-inset='true' data-role='listview'>".
+      "<li class='ui-li-divider ui-bar-inherit ui-first-child' data-role='list-divider' role='heading' ".
+	  "style='background: #111111; color: white;'></li>".
+	  "<li><a id='jobshead' class='ui-btn ui-btn-icon-right ui-icon-carat-r ui-shadow' data-theme='a' ".
+	  " href='#' onclick=\"listjobs();\" ".
+	  " data-rel='popup' style='background: #666666; color: black; '><center>offene Jobs</center></a><div id='jobs' style='display:none;'></div>";			  
+print "<li class='ui-li-divider ui-bar-inherit ui-last-child' data-role='list-divider' role='heading'></li></ul>";	
 

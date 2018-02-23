@@ -1,12 +1,30 @@
 <script>
 
 var mydir = '/admin';
+var screenWidthOld = 0;
 
 $(window).resize(function() {
-	init_window();
-	$('#details').hide();
-	shownodes();
+	if (screen.width != screenWidthOld ) {
+		screenWidthOld = screen.width;
+	    //alert(screen.width);
+	    init_window();
+	    $('#details').hide();
+	    shownodes();
+	}
 });
+
+function listjobs(){
+	if ($('#jobs').is(":visible")) {
+		$('#jobshead').attr('class','ui-btn ui-btn-icon-right ui-icon-carat-r ui-shadow');
+		$('#jobs').hide();
+	} else {
+		$('#jobshead').attr('class','ui-btn ui-btn-icon-right ui-icon-carat-d ui-shadow');
+		$.get(mydir+'/rf24hubadm_jobs.php', function(data) { 
+			$('#jobs').html(data); 
+			$('#jobs').show();
+		});
+	}
+}
 
 function shownodes() {
 	$.get(mydir+'/rf24hubadm_list.php', function(data) { 

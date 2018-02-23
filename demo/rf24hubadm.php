@@ -1,7 +1,30 @@
 <script>
 
-var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
 var mydir = '/demo';
+var screenWidthOld = 0;
+
+$(window).resize(function() {
+	if (screen.width != screenWidthOld ) {
+		screenWidthOld = screen.width;
+	    //alert(screen.width);
+	    init_window();
+	    $('#details').hide();
+	    shownodes();
+	}
+});
+
+function listjobs(){
+	if ($('#jobs').is(":visible")) {
+		$('#jobshead').attr('class','ui-btn ui-btn-icon-right ui-icon-carat-r ui-shadow');
+		$('#jobs').hide();
+	} else {
+		$('#jobshead').attr('class','ui-btn ui-btn-icon-right ui-icon-carat-d ui-shadow');
+		$.get(mydir+'/rf24hubadm_jobs.php', function(data) { 
+			$('#jobs').html(data); 
+			$('#jobs').show();
+		});
+	}
+}
 
 function shownodes() {
 	$.get(mydir+'/rf24hubadm_list.php', function(data) { 
@@ -104,8 +127,8 @@ function showresult(mysensor, mypage) {
 	});
 }
 
-
-$(document).ready(function(){
+function init_window() {
+	var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
     $('#hideme').hide();
 	$('#node').hide();
     $('#details_ctl').hide();
@@ -152,9 +175,12 @@ $(document).ready(function(){
 			}
 		}
 	}
-	$('#mynum_col').val(mynum_col);
-//alert(width);
-  $('#myslider1').slider();
+	$('#mynum_col').val(mynum_col);	
+    $('#myslider1').slider();
+}
+
+$(document).ready(function(){
+	init_window();
 });
 
 </script>
