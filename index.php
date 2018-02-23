@@ -14,10 +14,13 @@ $login=false;
 $is_loged_in=false;
 $session_started=false;
 $login_msg="";
-$cookie_msg="";
-$cookie_ok=false; 
+$session_cookie_ok=false; 
+$identifier_ok=false;
+$securitytoken_ok=false;
 $email="";
 $passwd="";
+$sessionid="";
+$rememberMe=0;
 $sql_show = "role in ('+', '-')";
 
 $login_msg = "";
@@ -31,47 +34,68 @@ if ( isset($_COOKIE["EMAIL"]) ) {
 if ( isset($_COOKIE["PASSWD"]) ) {
     $passwd=$_COOKIE["PASSWD"];
 }
-if ($email != "" && $passwd != "") {
+if ( isset($_COOKIE["REMEMBER"]) ) {
+    $rememberMe=$_COOKIE["REMEMBER"];
+}
+if ( isset($_COOKIE["PHPSESSID"]) ) {
+    if ( $_COOKIE["PHPSESSID"] != "" ) { 
+		$session_cookie_ok = true; 
+	}
+}
+if ( isset($_COOKIE["identifier"]) ) {
+	$identifier = $_COOKIE['identifier'];
+	$identifier_ok = true;
+}
+if ( isset($_COOKIE["securitytoken"]) ) {
+	$securitytoken = $_COOKIE['securitytoken'];
+	$securitytoken_ok = true;
+}
+if ( ($email != "" && $passwd != "") || ($session_cookie_ok && ! $logout) || ($securitytoken_ok && $identifier_ok) ) {
 	session_start();
     $session_started=true;
-    $statement = $www_db->prepare("SELECT * FROM users WHERE email = :email");
-    $result = $statement->execute(array('email' => $email));
-    $user = $statement->fetch();
-    //Überprüfung des Passworts
-    if ($user !== false && password_verify($passwd, $user['passwort'])) {
-        $_SESSION['userid'] = $user['id'];
-//    !!!!! Muss überarbeitet werden !!!!!!
-//        die('Login erfolgreich. Weiter zu <a href="/">internen Bereich</a>');
-//		if(isset($_POST['angemeldet_bleiben'])) {
-//			$identifier = random_string();
-//			$securitytoken = random_string();				
-//			$insert = $www_db->prepare("INSERT INTO securitytokens (user_id, identifier, securitytoken) VALUES (:user_id, :identifier, :securitytoken)");
-//			$insert->execute(array('user_id' => $user['id'], 'identifier' => $identifier, 'securitytoken' => sha1($securitytoken)));
-//			setcookie("identifier",$identifier,time()+(3600*24*365)); //Valid for 1 year
-//			setcookie("securitytoken",$securitytoken,time()+(3600*24*365)); //Valid for 1 year
-//		}
-		$login=true;
-		$sql_show = "role in ('+', 'a')";
-    } else {
-        $login_msg=$login_msg."E-Mail oder Passwort war ungültig";
-    }
-}
-
-if ( isset($_COOKIE["PHPSESSID"]) ) {
-    if ( $_COOKIE["PHPSESSID"] != "" ) { $cookie_ok = true; }
-	$cookie_msg="Cookie gesetzt: ".$_COOKIE["PHPSESSID"]."<hr>";
-}
-if ( ($cookie_ok && ! $logout) || $login ) { 
-	if ( ! $session_started ) session_start();
-	$vorname="";
-	$nachname="";
-	$userid="";
+	if ($securitytoken_ok && $identifier_ok) {
+		$statement = $www_db->prepare("SELECT * FROM securitytokens WHERE identifier = ?");
+		$result = $statement->execute(array($identifier));
+		$securitytoken_row = $statement->fetch();
+		if(sha1($securitytoken) !== $securitytoken_row['securitytoken']) {
+			die('Ein vermutlich gestohlener Security Token wurde identifiziert');
+		} else { //Token war korrekt 
+		//Setze neuen Token
+			$neuer_securitytoken = random_string(); 
+			$insert = $www_db->prepare("UPDATE securitytokens SET securitytoken = :securitytoken WHERE identifier = :identifier");
+			$insert->execute(array('securitytoken' => sha1($neuer_securitytoken), 'identifier' => $identifier));
+			setcookie("identifier",$identifier,time()+(3600*24*365)); //1 Jahr Gültigkeit
+			setcookie("securitytoken",$neuer_securitytoken,time()+(3600*24*365)); //1 Jahr Gültigkeit
+		//Logge den Benutzer ein	
+			$_SESSION['userid'] = $securitytoken_row['user_id'];
+		}
+	} else if ($email != "" && $passwd != "") {
+		$statement = $www_db->prepare("SELECT * FROM users WHERE email = :email");
+		$result = $statement->execute(array('email' => $email));
+		$user = $statement->fetch();
+		//Überprüfung des Passworts
+		if ($user !== false && password_verify($passwd, $user['passwort'])) {
+			$_SESSION['userid'] = $user['id'];
+			if( $rememberMe == "1" ) {
+				$identifier = random_string();
+				$securitytoken = random_string();				
+				$insert = $www_db->prepare("INSERT INTO securitytokens (user_id, identifier, securitytoken) VALUES (:user_id, :identifier, :securitytoken)");
+				$insert->execute(array('user_id' => $user['id'], 'identifier' => $identifier, 'securitytoken' => sha1($securitytoken)));
+				setcookie("userid",$user['id'],time()+(3600*24*365)); //Valid for 1 year
+				setcookie("identifier",$identifier,time()+(3600*24*365)); //Valid for 1 year
+				setcookie("securitytoken",$securitytoken,time()+(3600*24*365)); //Valid for 1 year
+			}
+		} else {
+			$login_msg=$login_msg."E-Mail oder Passwort war ungültig";
+		}
+	}
 	if(is_checked_in()) {
 		$user = check_user();
 		$vorname = htmlentities($user['vorname']);
 		$nachname = htmlentities($user['nachname']);
 		$userid = htmlentities($user['id']);
 		$is_loged_in=true;
+		$sql_show = "role in ('+', 'a')";
 	}
 }
 
@@ -140,12 +164,18 @@ function eraseCookie(name) {
 function login() {
 		createCookie('EMAIL',$('#email').val(),1);
 		createCookie('PASSWD',$('#passwd').val(),1);
+		if ( $('#rememberme').val() == 1 ) {
+			createCookie('REMEMBER',$('#rememberme').val(),1);
+		}
 	    refreshPage();
 }
 function logout() {
 		eraseCookie('EMAIL');
 		eraseCookie('PASSWD');
 		eraseCookie('PHPSESSID');
+		eraseCookie('identifier');
+		eraseCookie('securitytoken');
+	    eraseCookie('userid');
 	    refreshPage();
 }
  
@@ -320,6 +350,8 @@ $(document).ready(function(){
 	$('#mymenu').append("<li class='has_sub'><a href='#'><span>Login</span></a><ul id='loginbox'><li>"+
 						"E-Mail:<br><input id='email' type='email' size='31' maxlength='250' name='email'><br>"+
 						"Passwort:<br><input id='passwd' type='password' size='31'  maxlength='250' name='passwort'><br>"+
+						"<div class='checkbox'><label><input id='rememberme' type='checkbox' name='angemeldet_bleiben' value='1' checked> "+
+						"Angemeldet bleiben </label></div>"+
 						"<button id='loginbut' class=' ui-btn ui-shadow ui-corner-all' onclick='login();'> Anmelden</button></li></ul></li>");
 <?php endif; ?>	
    $('#email').click(function() {
@@ -351,6 +383,9 @@ switch ( window.location.pathname ) {
   $('#bmme').removeClass('active');
   $('#bmme').addClass('hidden');
 <?php endif; ?>			 
+	eraseCookie("EMAIL");
+	eraseCookie("PASSWD");
+	eraseCookie("REMEMBER");
 });	
  
 function getcontent(mypage,myurlx) {
