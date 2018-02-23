@@ -1,7 +1,12 @@
 <script>
 
-var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
 var mydir = '/admin';
+
+$(window).resize(function() {
+	init_window();
+	$('#details').hide();
+	shownodes();
+});
 
 function shownodes() {
 	$.get(mydir+'/rf24hubadm_list.php', function(data) { 
@@ -104,8 +109,8 @@ function showresult(mysensor, mypage) {
 	});
 }
 
-
-$(document).ready(function(){
+function init_window() {
+	var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
     $('#hideme').hide();
 	$('#node').hide();
     $('#details_ctl').hide();
@@ -152,9 +157,12 @@ $(document).ready(function(){
 			}
 		}
 	}
-	$('#mynum_col').val(mynum_col);
-//alert(width);
-  $('#myslider1').slider();
+	$('#mynum_col').val(mynum_col);	
+    $('#myslider1').slider();
+}
+
+$(document).ready(function(){
+	init_window();
 });
 
 </script>
