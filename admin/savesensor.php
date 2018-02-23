@@ -7,20 +7,17 @@ if (isset($_GET["sn"])) { $sn=$_GET["sn"]; } else { $sn=" "; }
 if (isset($_GET["si"])) { $si=$_GET["si"]; } else { $si=" "; }
 if (isset($_GET["nid"])) { $nid=$_GET["nid"]; } else { $nid="00"; }
 if (isset($_GET["ch"])) { $ch=$_GET["ch"]; } else { $ch=0; }
+$ch=$ch*1;
 if (isset($_GET["ty"])) { $ty=$_GET["ty"]; } else { $ty=0; }
+$ty=$ty*1;
 
 if ( $osid == 0 ) {
-	$sensorhub_db->query(" insert into sensor (sensor_id, sensor_name, add_info, node_id, channel, type)  ".
-						 " values(".$sid.",'".$sn."', '".$si."', '".$nid."', ".$ch.", '".$ty."' )"); 
+	$sql = "insert into sensor (sensor_id, sensor_name, add_info, node_id, channel, type) values(".$sid.",'".$sn."', '".$si."', '".$nid."', ".$ch.", '".$ty."' )";
+	$sensorhub_db->query($sql);
 	print "Neuen Sensor angelegt: ".$sid;
 } else {
-	$sensorhub_db->query(" update sensor set ".
-						 "sensor_name = '".$sn."', ".
-						 "add_info = '".$si."', ".
-						 "node_id = '".$nid."', ".
-						 "channel = ".$ch.", ".
-						 "type = '".$ty."' ".
-						 " where sensor_id = ".$osid." "); 
+	$sql = "update sensor set sensor_name = '".$sn."', add_info = '".$si."', node_id = '".$nid."', channel = ".$ch.", type = '".$ty."' where sensor_id = ".$osid;
+        $sensorhub_db->query($sql);
 	print "Update erfolgt für SensorID: ".$osid; 
 }
 ?>
