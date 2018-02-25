@@ -118,9 +118,9 @@ if ($data_y1_max-$data_y1_min > 2 ) {
 		$scale_y1_min=floor($data_y1_min/10)*10;
 	}	
 	if ($data_y1_max > 0) {
-		$scale_y1_max=floor($data_y1_max/10)*10+10;
+		$scale_y1_max=ceil($data_y1_max/10)*10;
 	} else {
-		$scale_y1_max=floor($data_y1_max/10)*10;
+		$scale_y1_max=ceil($data_y1_max/10)*10;
 	}	
 } else {
 	if ($data_y1_min > 0) {
@@ -144,7 +144,7 @@ $graph->SetFrame(true,'#dddddd', 0);
 $graph->title->Set($label_1);
 $line = new LinePlot($data_y1);
 $graph->Add($line);
-if ( abs($scale_y1_max) > 10 or abs($scale_y1_min) > 10 ) {
+if ( abs($scale_y1_max) > 10 or abs($scale_y1_min) > 10 or $scale_y1_min < -9 ) {
 	$graph->yaxis->SetLabelFormat('%4.0f');
 } else {
 	$graph->yaxis->SetLabelFormat('%3.1f');
