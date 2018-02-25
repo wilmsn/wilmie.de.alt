@@ -21,7 +21,7 @@ if (isset($_GET["bid"])) { $bid=$_GET["bid"]; }
 $bid=$bid*1;
 
 if ( $onid == 0 ) {
-$sql ="insert into node (node_id, node_name, add_info, sleeptime1, sleeptime2, sleeptime3, sleeptime4, radiomode, voltagecorrection, battery_id) values('".$nid."', '".$nn."', '".$ni."', ".$st1.", ".$st2.", ".$st3.", ".$st4.", ".$rm.", ".$vd.", ".$bid.")";
+$sql ="insert into node (node_id, node_name, add_info, sleeptime1, sleeptime2, sleeptime3, sleeptime4, radiomode, voltagefactor, battery_id) values('".$nid."', '".$nn."', '".$ni."', ".$st1.", ".$st2.", ".$st3.", ".$st4.", ".$rm.", ".$vd.", ".$bid.")";
 	$sensorhub_db->query($sql);
 	print "Neuen Node angelegt, NodeID: ".$nid;
 } else {
