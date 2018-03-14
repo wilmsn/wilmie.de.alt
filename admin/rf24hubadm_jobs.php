@@ -1,12 +1,17 @@
 <?php
-require_once("/sd_p2/web/php_inc/sensorhub.inc.php");
 
-print "<center><table><tr><th>Node_ID</th><th>Channel</th><th>Value</th><th>Startzeitpunkt</th></tr>";
+$socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+$result = socket_connect($socket, '127.0.0.1', 7001);
 
-foreach ($sensorhub_db->query("select node_id, channel, value, from_unixtime(utime) from jobbuffer ") as $row) {
-	print "<tr><td>&nbsp;".$row[0]."&nbsp;</td><td>&nbsp;".$row[1]."&nbsp;</td><td>&nbsp;".$row[2]."&nbsp;</td><td>&nbsp;".$row[3]."&nbsp;</td></tr>";
+$in = "html order\r\n";
+$out = '';
+
+socket_write($socket, $in, strlen($in));
+
+while ($out = socket_read($socket, 2048)) {
+	if ( (! strpos($out, 'f24hub')) and (! strpos($out, 'received')) ) echo $out."<br>";
 }
 
-echo "</tr></table>&nbsp;</center>"; 
+socket_close($socket);
 
 ?>
