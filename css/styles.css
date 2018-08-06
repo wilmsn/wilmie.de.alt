@@ -24,11 +24,53 @@ left : 0;
 #head_info {
 position : absolute;
 text-align : center;
-top : 20px;
-right : 20px;
-height : 50px;
-width : 300px;
+font-size : 0.9em;
+top : 10px;
+right : 10px;
+height : 70px;
+width : 400px;
+background-color : #eee;
 z-index : 40;
+}
+#cookiediv_m {
+position : absolute;
+top : 30%;
+right : 5%;
+height : 100px;
+width : 90%;
+background-color : #eee;
+padding : 5px;
+z-index : 40;	
+}
+#cookiediv {
+position : absolute;
+top : 300px;
+right : 0px;
+height : 100px;
+width : 350px;
+background-color : #eee;
+padding : 5px;
+z-index : 40;	
+}
+#cookiediv1 {
+position : absolute;
+text-align : center;
+font-size : 0.9em;
+top : 70px;
+left : 20%;
+height : 70px;
+width : 30%;
+z-index : 41;
+}
+#cookiediv2 {
+position : absolute;
+text-align : center;
+font-size : 0.9em;
+top : 70px;
+right : 20%;
+height : 70px;
+width : 30%;
+z-index : 41;
 }
 #main {
 position : relative;
@@ -41,7 +83,7 @@ left : 0;
 #info {
 font-size : 0.9em;
 float : right;
-width : 10em;
+width : 150px;
 margin : 0 0 1.1em;
 padding : 5px;
 background-color : #eee;

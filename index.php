@@ -198,16 +198,6 @@ function refreshPage() {
  
  
 <?php if( $is_mobile_browser ): ?>
- var info='info'; 
- var infourl='/main.php'; 
- var wetter='wetter'; 
- var wetterurl='/wetter.php'; 
- var gal='swipe'; 
- var galurl='/gallery.php?dir=herbst03'; 
- var gal1='swipe1'; 
- var gal1url='/gallery.php?dir=thailand'; 
- var gal2='swipe2'; 
- var gal2url='/gallery.php?dir=wien'; 
 $(document).one('pagebeforecreate', function () {
 $('#home').append("<div data-role='panel' id='menu_panel' data-theme='a' data-display='overlay' data-position='left'>"
 				  +"</div>"
@@ -252,13 +242,8 @@ $('#home').append("<div data-role='panel' id='menu_panel' data-theme='a' data-di
 	eraseCookie("EMAIL");
 	eraseCookie("PASSWD");
 <?php else: ?>
-	$('#menu_panel').append("<a href='#panel_am' data-role='button' data-theme='a' >anmelden</a>");
-	$('#home').append("<div data-role='panel' id='panel_am' data-theme='a' data-display='overlay' data-position='left'>Anmelden</div>");
-	$('#panel_am').append("<br><fieldset>"+
-						  "E-Mail:<br><input id='email' type='email' size='31' maxlength='250' name='email'><br>"+
-						  "Passwort:<br><input id='passwd' type='password' size='31'  maxlength='250' name='passwort'><br>"+
-						  "<div><label><input id='rememberme'  data-theme='b' type='checkbox' name='angemeldet_bleiben' value='1' checked> "+
-						  "Angemeldet bleiben </label></div><a href='#' onclick='login();' data-role='button' data-theme='a' >anmelden</a></fieldset>");
+	$('#menu_panel').append("<a href='#' data-role='button' data-theme='a' onclick='getcontent(\"/content/login.html\");'  >anmelden</a>");
+//	$('#home').append("<div data-role='panel' id='panel_am' data-theme='a' data-display='overlay' data-position='left'>Anmelden</div>");
 	$('#myheadline').html("wilmie.de  "+login_msg+"");
 <?php endif; ?>	
 
@@ -286,7 +271,9 @@ else:
 
 $(document).ready(function(){
 	$('#home').append("<div id='wrapper'><div id='head'></div><div id='menu' class='menu'></div><div id='main'><div id='content'></div></div></div>");
-	$('#head').append("<div id='head_info'></div>");
+//	$('#head').append("<div id='head_info'>Diese Website verwendet Cookies. Durch die Nutzung erklärst du dich mit dem Einsatz von Cookies einverstanden.<br><center>"+
+//	                  "<div id='head_info1'><a href='https://wilmie.myhome-server.de/datenschutz'>Mehr Details</a></div>"+
+//					  "<div id='head_info2'><button onclick='close_cookie();'>OK</button></center></div></div>");
     $('#head').append("<img src=/img/wilmie.png border=0><img src=/img/headline_pics.png border=0>"); 
     $('#menu').append("<div id='cssmenu'><ul id='mymenu'></ul></div>");
 <?php		
@@ -344,14 +331,9 @@ $(document).ready(function(){
 	}	
 ?>	
 <?php if( $is_loged_in ) : ?>
-	$('#mymenu').append("<li class='has_sub'><a href='#'><span>Logout</span></a><ul><li><button id='logoutbut' class='ui-btn ui-shadow ui-corner-all' onclick='logout();'> Abmelden</button></li></ul></li>");
+	$('#mymenu').append("<li><a href='#' onclick='logout();'><span>Logout</span></a></li>");
 <?php else: ?>
-	$('#mymenu').append("<li class='has_sub'><a href='#'><span>Login</span></a><ul id='loginbox'><li>"+
-						"E-Mail:<br><input id='email' type='email' size='31' maxlength='250' name='email'><br>"+
-						"Passwort:<br><input id='passwd' type='password' size='31'  maxlength='250' name='passwort'><br>"+
-						"<div class='checkbox'><label><input id='rememberme' type='checkbox' name='angemeldet_bleiben' value='1' checked> "+
-						"Angemeldet bleiben </label></div>"+
-						"<button id='loginbut' class=' ui-btn ui-shadow ui-corner-all' onclick='login();'> Anmelden</button></li></ul></li>");
+	$('#mymenu').append("<li><a href='#' onclick='getcontent(\"/content/login.html\", \"login\");' ><span>Login</span></a>");
 <?php endif; ?>	
    $('#email').click(function() {
 	   $('#loginbox').css('display', 'block');
