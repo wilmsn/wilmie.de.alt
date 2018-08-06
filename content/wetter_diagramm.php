@@ -29,6 +29,9 @@ switch ($sensor1legend) {
    case "Luftdruck":
 	$einheit="hPa ->";
 	break;
+   case "Luftfeuchte":
+	$einheit="% ->";
+	break;
    case "Batterie":
 	$einheit="V ->";
 	break;

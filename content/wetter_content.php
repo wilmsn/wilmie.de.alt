@@ -22,7 +22,7 @@ if($mobile_browser) {
   position: absolute;
   padding: 10px;   
   }
-  #wetter1, #wetter2, #wetter3 {
+  #wetter1a, #wetter1b, #wetter1c{
   height: 40px;
   width: 33%;	  
   background: #ddd; 
@@ -31,15 +31,15 @@ if($mobile_browser) {
   border: 1px solid #000; 
   padding: 10px;   
   }	  
-  #wetter1 { 
+  #wetter1a { 
   left: 0%;
   top: 90px;
   }
-  #wetter2 { 
+  #wetter1b { 
   left: 33%;
   top: 90px;
   }
-  #wetter3 { 
+  #wetter1c { 
   left: 66%;
   top: 90px;
   }
@@ -85,7 +85,7 @@ if($mobile_browser) {
   position: absolute;
   padding: 10px;   
   }
-  #wetter1, #wetter2, #wetter3 {
+  #wetter1a, #wetter1b, #wetter1c, #wetter3 {
   height: 50px;
   width: 130px;	  
   background: #ddd; 
@@ -94,13 +94,17 @@ if($mobile_browser) {
   border: 1px solid #000; 
   padding: 10px;   
   }	  
-  #wetter1 { 
+  #wetter1a { 
   left: 10px;
   top: 150px;
   }
-  #wetter2 { 
+  #wetter1b { 
   left: 180px;
   top: 150px;
+  }
+  #wetter1c { 
+  left: 10px;
+  top: 250px;
   }
   #wetter3 { 
   left: 10px;
@@ -181,33 +185,45 @@ function set_divs() {
 		$('#wetter_s3').css('backgroundColor', but_color1);
 	} 
     switch($('#wetter_t2').html()) {
-    case "2":
-		$('#wetter1').css('backgroundColor', but_color1);
-		$('#wetter2').css('backgroundColor', but_color2);
+    case "1b":
+		$('#wetter1a').css('backgroundColor', but_color1);
+		$('#wetter1b').css('backgroundColor', but_color2);
+		$('#wetter1c').css('backgroundColor', but_color1);
 		$('#wetter3').css('backgroundColor', but_color1);
 		mycolor='0000FF';
 		mylegend='Luftdruck';
         break;
+    case "1c":
+		$('#wetter1a').css('backgroundColor', but_color1);
+		$('#wetter1b').css('backgroundColor', but_color1);
+		$('#wetter1c').css('backgroundColor', but_color2);
+		$('#wetter3').css('backgroundColor', but_color1);
+		mycolor='00FFFF';
+		mylegend='rel. Luftfeuchte';
+        break;
     case "3":
-		$('#wetter1').css('backgroundColor', but_color1);
-		$('#wetter2').css('backgroundColor', but_color1);
+		$('#wetter1a').css('backgroundColor', but_color1);
+		$('#wetter1b').css('backgroundColor', but_color1);
+		$('#wetter1c').css('backgroundColor', but_color1);
 		$('#wetter3').css('backgroundColor', but_color2);
 		mycolor='00FF00';
 		mylegend='Batterie';
         break;
     default:
-		$('#wetter1').css('backgroundColor', but_color2);
-		$('#wetter2').css('backgroundColor', but_color1);
+		$('#wetter1a').css('backgroundColor', but_color2);
+		$('#wetter1b').css('backgroundColor', but_color1);
+		$('#wetter1c').css('backgroundColor', but_color1);
 		$('#wetter3').css('backgroundColor', but_color1);
 		mycolor='FF0000';
 		mylegend='Temperatur';
 	} 
 //	alert(mycolor);
-	$('#wetter_dia').attr('src', '/content/wetter_diagramm.php?sensor1='+$('#wetter_t2').html()+'&sensor1color='+mycolor+'&sensor1legend='+mylegend+'&sizex='+w+'&sizey=370&range='+$('#wetter_t1').html()+'&t='+n)
+	$('#wetter_dia').attr('src', '/content/wetter_diagramm.php?sensor1='+$('#wetter_t3').html()+'&sensor1color='+mycolor+'&sensor1legend='+mylegend+'&sizex='+w+'&sizey=370&range='+$('#wetter_t1').html()+'&t='+n)
 } 
 $('#zeit').css('backgroundColor', but_color1);
 $('#wetter_t1').hide().html('1');  
-$('#wetter_t2').hide().html('1');  
+$('#wetter_t2').hide().html('1a');  
+$('#wetter_t3').hide().html('1'); 
 set_divs();
 $("#wetter_s1").click(function(){
   $('#wetter_t1').html('1')
@@ -221,16 +237,24 @@ $("#wetter_s3").click(function(){
   $('#wetter_t1').html('365')
   set_divs();
 });  
-$("#wetter1").click(function(){
-  $('#wetter_t2').html('1')
+$("#wetter1a").click(function(){
+  $('#wetter_t2').html('1a')
+  $('#wetter_t3').html('1')
   set_divs();
 });  
-$("#wetter2").click(function(){
-  $('#wetter_t2').html('2')
+$("#wetter1b").click(function(){
+  $('#wetter_t2').html('1b')
+  $('#wetter_t3').html('2')
+  set_divs();
+});  
+$("#wetter1c").click(function(){
+  $('#wetter_t2').html('1c')
+  $('#wetter_t3').html('5')
   set_divs();
 });  
 $("#wetter3").click(function(){
   $('#wetter_t2').html('3')
+  $('#wetter_t3').html('3')
   set_divs();
 });  
 
@@ -261,20 +285,27 @@ SOI = (typeof(SOI) != 'undefined') ? SOI : {};
 })();
 </script>
 </div>
-<div id='wetter1'<center>Temperatur:<br><b>
+<div id='wetter1a'<center>Temperatur:<br><b>
 <?php
   $results = $db->query("SELECT value FROM sensor where sensor_id = 1 LIMIT 1");
   $row = $results->fetch_assoc();
   echo number_format($row['value'],1, ",", ".");
 ?>
  C</b></center></div>
-<div id='wetter2'><center>Luftdruck:<br><b>
+<div id='wetter1b'><center>Luftdruck:<br><b>
 <?php
   $results = $db->query("SELECT value FROM sensor where sensor_id = 2 LIMIT 1");
   $row = $results->fetch_assoc();
   echo number_format($row['value'],0, ",", ".");
 ?>
  hPa</b></center></div>
+<div id='wetter1c'><center>rel. Luftfeuchte:<br><b>
+<?php
+  $results = $db->query("SELECT value FROM sensor where sensor_id = 5 LIMIT 1");
+  $row = $results->fetch_assoc();
+  echo number_format($row['value'],1, ",", ".");
+?>
+ &#37;</b></center></div>
 <div id='wetter3'><center>Batterie:<br><b>
 <?php
   $results = $db->query("SELECT value FROM sensor where sensor_id = 3 LIMIT 1");
@@ -294,6 +325,8 @@ SOI = (typeof(SOI) != 'undefined') ? SOI : {};
 <div id='wetter_t1'>
 </div>
 <div id='wetter_t2'>
+</div>
+<div id='wetter_t3'>
 </div>
 
 </center>
