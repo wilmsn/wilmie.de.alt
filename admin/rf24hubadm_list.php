@@ -36,9 +36,8 @@ function node_details($db,$node) {
 # Nodes auflisten
 #
 #######################
-foreach ($sensorhub_db->query(" select node_id, node_name, add_info from node where node_id <> '00' ".
-						   " order by substr(Node_id,length(node_id),1), substr(Node_id,length(node_id)-1,1), ".
-						   " substr(Node_id,length(node_id)-2,1) ") as $row_node) { 
+foreach ($sensorhub_db->query(" select node_id, node_name, add_info from node where html_show = 'y' ".
+						   " order by html_sort ") as $row_node) { 
 	$mynode="'".$row_node[0]."'";					   
 	print "<ul class='ui-listview ui-listview-inset ui-corner-all ui-shadow' data-inset='true' data-role='listview'>".
           "<li class='ui-li-divider ui-bar-inherit ui-first-child' data-role='list-divider' role='heading' ".
@@ -48,7 +47,7 @@ foreach ($sensorhub_db->query(" select node_id, node_name, add_info from node wh
 	      " data-rel='popup' style='background: #666666; color: black; ' ><center>".$row_node[1]."(".$row_node[0].")</center></a>";	
 	node_details($sensorhub_db, $row_node[0]);
 	foreach ($sensorhub_db->query("select Sensor_id, Sensor_name ".
-	                              " from sensor where node_id = '$row_node[0]' order by channel asc ") as $row_sensor) {   
+	                              " from sensor where node_id = '$row_node[0]' and html_show = 'y' order by channel asc ") as $row_sensor) {   
 		print "<a id='ss".$row_sensor[0]."' class='ui-btn ui-btn-icon-right ui-icon-carat-r ui-shadow' data-theme='a' ".
 		      " href='#' onclick='showsensor(".$row_sensor[0].");' ".
 		      " data-rel='popup' style='background: #AAAAAA; color: white;' >".$row_sensor[1]."(".$row_sensor[0].")</a>";
