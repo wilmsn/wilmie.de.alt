@@ -84,7 +84,9 @@ function savesensor(mysensorid){
 	mynid=$('#is_nid_'+mysensorid).val();
 	mych=$('#is_ch_'+mysensorid).val();
 	myty=$('#is_ty_'+mysensorid).val();
-	$.get(mydir+'/savesensor.php',{osid: mysensorid, sid: mysid, sn: mysn, si: mysi, nid: mynid, ch: mych, ty: myty }, function(data) { 
+	myfh=$('#is_fh_'+mysensorid).val();
+	mysd=$('#is_sd_'+mysensorid).val();
+	$.get(mydir+'/savesensor.php',{osid: mysensorid, sid: mysid, sn: mysn, si: mysi, nid: mynid, ch: mych, ty: myty, sd: mysd, fh: myfh }, function(data) { 
 		alert(data);
 	});
 }

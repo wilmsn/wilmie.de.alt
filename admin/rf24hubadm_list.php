@@ -98,7 +98,7 @@ print "<ul class='ui-listview ui-listview-inset ui-corner-all ui-shadow' data-in
 	  "<li><a id='senshead' class='ui-btn ui-btn-icon-right ui-icon-carat-r ui-shadow' data-theme='a' ".
 	  " href='#' onclick=\"enablesensor();\" ".
 	  " data-rel='popup' style='background: #666666; color: black; '><center>Sensoren editieren</center></a><div id='sensoren' style='display:none;'>";			  
-foreach ($sensorhub_db->query("select sensor_id, sensor_name, add_info, node_id, channel, s_type from sensor order by sensor_id") as $row_sensor) {   
+foreach ($sensorhub_db->query("select sensor_id, sensor_name, add_info, node_id, channel, s_type, store_days, fhem_dev from sensor order by sensor_id") as $row_sensor) {   
 	print "<a id='sa".$row_sensor[0]."' class='ui-btn ui-btn-icon-right ui-icon-carat-r ui-shadow' data-theme='a' ".
 	      " href='#' onclick=\"editsensor('".$row_sensor[0]."');\" ".
 	      " data-rel='popup' style='background: #AAAAAA; color: white;'>".$row_sensor[1]." (".$row_sensor[0].") </a>".
@@ -122,6 +122,8 @@ foreach ($sensorhub_db->query("select sensor_id, sensor_name, add_info, node_id,
 		print "<option value='s'>Sensor</option><option value='a' selected>Actor</option>";
 	}
 	print "</select></td></tr>".
+		  "<tr><td width=200>Device FHEM:</td><td width=300><input size=25 id='is_fh_".$row_sensor[0]."' value='".$row_sensor[7]."'></td></tr>".
+		  "<tr><td width=200>Speicherdauer:</td><td width=300><input size=10 id='is_sd_".$row_sensor[0]."' value='".$row_sensor[6]."'></td></tr>".	
 		  "</table><button class='ui-btn' onclick='savesensor(".$row_sensor[0].")'>Werte speichern</button></center></div>";
 }	
 print "<a class='ui-btn ui-btn-icon-right ui-icon-carat-r ui-shadow' data-theme='a' ".
