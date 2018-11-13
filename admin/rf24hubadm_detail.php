@@ -32,11 +32,11 @@ if (isset($_GET["page"]))  {
 if ( $sensor > 0 ) { 
 	$id=$sensor;
 	print "<center>&nbsp<b>";
-	foreach ($sensorhub_db->query("select sensor_id, sensor_name, s_type from sensor where sensor_id = ".$id." ") as $row) {
+	foreach ($sensorhub_db->query("select sensor_id, sensor_name, s_type, node_name from node, sensor where node.node_id = sensor.node_id and sensor_id = ".$id." ") as $row) {
 		if ( $row[2] == "s" ) {
-			print "Sensor: <br>".$row[1]." (".$row[0].")";
+			print "Sensor: ". $row[0]. "<br>".$row[3]."<br>".$row[1]." ";
 		} else {
-			print "Actor:  <br>".$row[1]." (".$row[0].")";
+			print "Actor: ". $row[0]. "<br>".$row[3]."<br>".$row[1]." ";
 		}
 	}
 	echo "</b></center>".
