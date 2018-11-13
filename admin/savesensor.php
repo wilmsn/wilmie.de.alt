@@ -15,10 +15,10 @@ if (isset($_GET["sd"])) { $sd=$_GET["sd"]; } else { $sd='-1'; }
 if ( $osid == 0 ) {
 	$sql = "insert into sensor (sensor_id, sensor_name, add_info, node_id, channel, s_type, fhem_dev, store_days) values(".$sid.",'".$sn."', '".$si."', '".$nid."', ".$ch.", '".$ty."' , '" .$fh. "' , ".$sd.")";
 	$sensorhub_db->query($sql);
-	print "Neuen Sensor angelegt: ".$sid."      ".$sql;
+	print "Neuen Sensor angelegt: ".$sid;
 } else {
 	$sql = "update sensor set sensor_name = '".$sn."', add_info = '".$si."', node_id = '".$nid."', channel = ".$ch.", s_type = '".$ty."', fhem_dev = '". $fh ."', store_days = ".$sd. " where sensor_id = ".$osid;
         $sensorhub_db->query($sql);
-	print "Update erfolgt für SensorID: ".$osid ."   ".$sql;
+	print "Update erfolgt für SensorID: ".$osid;
 }
 ?>
