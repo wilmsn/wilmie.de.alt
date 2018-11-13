@@ -224,7 +224,6 @@ $(document).ready(function(){
 		</div>
 		<div id="hideme">	
 			<input id='mysensor'/>
-			<input id='myactor'/>
 			<input id='mynum_col'/>
 			<input id='mypages' value='9'/>
 		</div>	
