@@ -18,21 +18,26 @@ function header_addLine(line_no, text_l, text_r) {
 function get_sw_data(dev_no, dev_disp_name, dev_disp_read, dev_fhem_name) {
 	$.get(basedir+'getfhem.php',{geraet: dev_fhem_name, eigenschaft: "state" }, function(data) {
 		$("#dev"+dev_no+"lr").html("("+data+")  ");
-//	alert("Neu: "+data);
+//	alert(dev_fhem_name + ": "+data);
     });
 	$.get(basedir+'getfhem.php',{geraet: dev_disp_name, eigenschaft: dev_disp_read }, function(data) {
+//	alert(dev_disp_read + ": " + data);
 	    switch(data) {
 			case "1.000000":
 				$("#dev"+dev_no+"lr").append("Ein");
+				$("#dev"+dev_no+"b0g").css("background-color", "yellow").css("color","white");
 			break;	
 			case "0.000000":
 				$("#dev"+dev_no+"lr").append("Aus");
+				$("#dev"+dev_no+"b0g").css("background-color", "black").css("color","white");
 			break;	
 			case "on":
 				$("#dev"+dev_no+"lr").append("Ein");
+				$("#dev"+dev_no+"b0g").css("background-color", "yellow").css("color","black");
 			break;	
 			case "off":
 				$("#dev"+dev_no+"lr").append("Aus");
+				$("#dev"+dev_no+"b0g").css("background-color", "black").css("color","white");
 			break;	
 			default:
 				$("#dev"+dev_no+"lr").append("-"+data);					
@@ -58,62 +63,76 @@ function dev_init(dev_no, dev_typ, dev_label, dev_disp_name, dev_disp_read, dev_
     switch (dev_typ) {
 		case "sw":
 			get_sw_data(dev_no, dev_disp_name, dev_disp_read, dev_fhem_name);
-			$("#dev"+dev_no).append("<div class='device_sw' id='dev"+dev_no+"d'>sw</div>");
+			$("#dev"+dev_no).append("<div class='device_sw' id='dev"+dev_no+"d'></div>");
 		    $("#dev"+dev_no+"d")
+			.append("<div class='device_sw_box0' id='dev"+dev_no+"b0'></div>")
 			.append("<div class='device_sw_box1' id='dev"+dev_no+"b1'></div>")
 			.append("<div class='device_sw_box2' id='dev"+dev_no+"b2'></div>")
 			.append("<div class='device_sw_box3' id='dev"+dev_no+"b3'></div>");
-			$("#dev"+dev_no+"b1").append("<img id='dev"+dev_no+"b1g' src='/img/but_gr_aus.png' width='100' height='50' />");			  
-			$("#dev"+dev_no+"b2").append("<img id='dev"+dev_no+"b2g' src='/img/but_gr_auto.png' width='100' height='50' />");			  
-			$("#dev"+dev_no+"b3").append("<img id='dev"+dev_no+"b3g' src='/img/but_gr_ein.png' width='100' height='50' />");	
+			$("#dev"+dev_no+"b0").append("<button type='button' id='dev"+dev_no+"b0g' class='stateicon'>X</button>");			  
+			$("#dev"+dev_no+"b1").append("<button type='button' id='dev"+dev_no+"b1g' class='button_akt'>Aus</button>");			  
+			$("#dev"+dev_no+"b2").append("<button type='button' id='dev"+dev_no+"b2g' class='button_akt'>Auto</button>");			  
+			$("#dev"+dev_no+"b3").append("<button type='button' id='dev"+dev_no+"b3g' class='button_akt'>Ein</button>");			  
 			$.get(basedir+'getfhem.php',{geraet: dev_fhem_name, eigenschaft: "state" }, function(data) {
 		//	    alert(data);
 			    switch (data) {
-					case "auto":
-						$("#dev"+dev_no+"b1g").attr('src', '/img/but_gr_aus.png');
-						$("#dev"+dev_no+"b2g").attr('src', '/img/but_rt_auto.png');
-						$("#dev"+dev_no+"b3g").attr('src', '/img/but_gr_ein.png');
-					break;
 					case "aus":
-						$("#dev"+dev_no+"b1g").attr('src', '/img/but_rt_aus.png');
-						$("#dev"+dev_no+"b2g").attr('src', '/img/but_gr_auto.png');
-						$("#dev"+dev_no+"b3g").attr('src', '/img/but_gr_ein.png');
+						$("#dev"+dev_no+"b1g").css("background-color", "#a80329");
+						$("#dev"+dev_no+"b2g").css("background-color", "grey");
+						$("#dev"+dev_no+"b3g").css("background-color", "grey");
+					break;
+					case "auto":
+						$("#dev"+dev_no+"b1g").css("background-color", "grey");
+						$("#dev"+dev_no+"b2g").css("background-color", "#a80329");
+						$("#dev"+dev_no+"b3g").css("background-color", "grey");
 					break;
 					case "ein":
-						$("#dev"+dev_no+"b1g").attr('src', '/img/but_gr_aus.png');
-						$("#dev"+dev_no+"b2g").attr('src', '/img/but_gr_auto.png');
-						$("#dev"+dev_no+"b3g").attr('src', '/img/but_rt_ein.png');
+						$("#dev"+dev_no+"b1g").css("background-color", "grey");
+						$("#dev"+dev_no+"b2g").css("background-color", "grey");
+						$("#dev"+dev_no+"b3g").css("background-color", "#a80329");
 					break;
 				}	
 			});			
 			$("#dev"+dev_no+"b1g").click(function(){
 				//setfhemdata(myroom, mydevice);
-				$("#dev"+dev_no+"b1g").attr('src', '/img/but_rt_aus.png');
-				$("#dev"+dev_no+"b2g").attr('src', '/img/but_gr_auto.png');
-				$("#dev"+dev_no+"b3g").attr('src', '/img/but_gr_ein.png');				
+				$("#dev"+dev_no+"b1g").css("background-color", "#a80329");
+				$("#dev"+dev_no+"b2g").css("background-color", "grey");
+				$("#dev"+dev_no+"b3g").css("background-color", "grey");
 				$.get(basedir+'setfhem.php',{geraet: dev_fhem_name, eigenschaft: " ", wert: "aus" }, function(data) {
-					alert(data);
-					get_sw_data(dev_no, dev_disp_name, dev_disp_read, dev_fhem_name);
+					setTimeout(function() {
+						//alert(dev_no + " " + dev_disp_name + " " + dev_disp_read + " " + dev_fhem_name);
+						get_sw_data(dev_no, dev_disp_name, dev_disp_read, dev_fhem_name);
+					}, 5000);
+				    //alert(data);
+					//get_sw_data(dev_no, dev_disp_name, dev_disp_read, dev_fhem_name);
 				});
 			}); 
 			$("#dev"+dev_no+"b2g").click(function(){
 				//setfhemdata(myroom, mydevice);
-				$("#dev"+dev_no+"b1g").attr('src', '/img/but_gr_aus.png');
-				$("#dev"+dev_no+"b2g").attr('src', '/img/but_rt_auto.png');
-				$("#dev"+dev_no+"b3g").attr('src', '/img/but_gr_ein.png');				
+				$("#dev"+dev_no+"b1g").css("background-color", "grey");
+				$("#dev"+dev_no+"b2g").css("background-color", "#a80329");
+				$("#dev"+dev_no+"b3g").css("background-color", "grey");
 				$.get(basedir+'setfhem.php',{geraet: dev_fhem_name, eigenschaft: " ", wert: "auto" }, function(data) {
-					alert(data);
-					get_sw_data(dev_no, dev_disp_name, dev_disp_read, dev_fhem_name);
+					setTimeout(function() {
+						//alert(dev_no + " " + dev_disp_name + " " + dev_disp_read + " " + dev_fhem_name);
+						get_sw_data(dev_no, dev_disp_name, dev_disp_read, dev_fhem_name);
+					}, 5000);
+//					alert(data);
+//					get_sw_data(dev_no, dev_disp_name, dev_disp_read, dev_fhem_name);
 				});
 			}); 
 			$("#dev"+dev_no+"b3g").click(function(){
 				//setfhemdata(myroom, mydevice);
-				$("#dev"+dev_no+"b1g").attr('src', '/img/but_gr_aus.png');
-				$("#dev"+dev_no+"b2g").attr('src', '/img/but_gr_auto.png');
-				$("#dev"+dev_no+"b3g").attr('src', '/img/but_rt_ein.png');				
+				$("#dev"+dev_no+"b1g").css("background-color", "grey");
+				$("#dev"+dev_no+"b2g").css("background-color", "grey");
+				$("#dev"+dev_no+"b3g").css("background-color", "#a80329");
 				$.get(basedir+'setfhem.php',{geraet: dev_fhem_name, eigenschaft: " ", wert: "ein" }, function(data) {
-					alert(data);
-					get_sw_data(dev_no, dev_disp_name, dev_disp_read, dev_fhem_name);
+					setTimeout(function() {
+						//alert(dev_no + " " + dev_disp_name + " " + dev_disp_read + " " + dev_fhem_name);
+						get_sw_data(dev_no, dev_disp_name, dev_disp_read, dev_fhem_name);
+					}, 5000);
+//					alert(data);
+//					get_sw_data(dev_no, dev_disp_name, dev_disp_read, dev_fhem_name);
 				});
 			}); 
                         this['img_up_'+dev_no]='/img/arrow_up.gif';

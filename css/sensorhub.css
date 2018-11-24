@@ -80,29 +80,45 @@
         height: 50px;
 		width: 100%;
 	}
-	.device_sw_box1 {
+	.device_sw_box0 {
 		position: absolute; 
 		top: 0px;
 		left: 0px;
- 		width: 33%; 
+ 		width: 51px; 
 		height: 50px;
-		text-align: center;
+        padding: 5px;
+ 		text-align: center;
+		background-color: #aaaaaa; 
+	}
+	.device_sw_box1 {
+		position: absolute; 
+		top: 0px;
+		left: 51px;
+ 		width: calc(30% - 17px); 
+		height: 50px;
+        padding: 5px;
+ 		text-align: center;
+		background-color: #aaaaaa; 
 	}
 	.device_sw_box2 {
 		position: absolute; 
 		top: 0px;
-		left: 33%;
- 		width: 34%; 
+		left: calc(30% + 34px);
+ 		width: calc(30% - 17px); 
 		height: 50px;
+        padding: 5px;
 		text-align: center;
+		background-color: #aaaaaa; 
 	}
 	.device_sw_box3 {
 		position: absolute; 
 		top: 0px;
-		left: 67%;
- 		width: 33%; 
+		left: calc(60% + 17px);
+ 		width: calc(30% - 17px); 
 		height: 50px;
+        padding: 5px;
 		text-align: center;
+		background-color: #aaaaaa; 
 	}
 	.device_ht {
         position: relative; 
@@ -123,3 +139,38 @@
 		top: 40px;
 		left: 25px;
     }	
+	
+.button_akt {
+   -webkit-border-radius: 10px;
+   -moz-border-radius: 10px;
+   border-radius: 10px;
+   color: #000000;
+   font-size: 20px;
+   font-weight: 500;
+   padding: 5px;
+   box-shadow: 1px 1px 20px 0px #000000;
+   -webkit-box-shadow: 1px 1px 20px 0px #000000;
+   -moz-box-shadow: 1px 1px 20px 0px #000000;
+   border: solid #a80329 2px;
+   text-decoration: none;
+   display: inline-block;
+   width: 70%;
+   cursor: pointer;
+}
+
+.stateicon {
+	-moz-border-radius:30px;
+	-webkit-border-radius:30px;
+	border-radius:30px;
+	border:2px solid #a80329;
+	display:inline-block;
+	cursor:pointer;
+	color:#000000;
+	font-family:Arial;
+	font-size:17px;
+	padding:6px 10px;
+	text-decoration:none;
+	cursor: default; 
+}
+
+
