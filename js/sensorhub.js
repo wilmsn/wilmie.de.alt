@@ -192,6 +192,15 @@ function dev_init(dev_no, dev_typ, dev_label, dev_disp_name, dev_disp_read, dev_
 			$("#dev"+dev_no+"i").attr('src', eval('img_up_'+dev_no) );
 		} 
 	});  
+	$("#dev"+dev_no+"l").click(function(){
+		if ( $("#dev"+dev_no+"d").is(':hidden') ) {
+			$("#dev"+dev_no+"d").show();
+			$("#dev"+dev_no+"i").attr('src', eval('img_dn_'+dev_no) );
+		} else {	
+			$("#dev"+dev_no+"d").hide();
+			$("#dev"+dev_no+"i").attr('src', eval('img_up_'+dev_no) );
+		} 
+	});  
 	$("#dev"+dev_no+"d").hide();
 	$("#dev"+dev_no+"i").attr('src', eval('img_up_'+dev_no) );
 }
