@@ -287,28 +287,28 @@ SOI = (typeof(SOI) != 'undefined') ? SOI : {};
 </div>
 <div id='wetter1a'<center>Temperatur:<br><b>
 <?php
-  $results = $db->query("SELECT value FROM sensor where sensor_id = 1 LIMIT 1");
+  $results = $db->query("SELECT value FROM sensor_im where sensor_id = 1 LIMIT 1");
   $row = $results->fetch_assoc();
   echo number_format($row['value'],1, ",", ".");
 ?>
  C</b></center></div>
 <div id='wetter1b'><center>Luftdruck:<br><b>
 <?php
-  $results = $db->query("SELECT value FROM sensor where sensor_id = 2 LIMIT 1");
+  $results = $db->query("SELECT value FROM sensor_im where sensor_id = 2 LIMIT 1");
   $row = $results->fetch_assoc();
   echo number_format($row['value'],0, ",", ".");
 ?>
  hPa</b></center></div>
 <div id='wetter1c'><center>rel. Luftfeuchte:<br><b>
 <?php
-  $results = $db->query("SELECT value FROM sensor where sensor_id = 5 LIMIT 1");
+  $results = $db->query("SELECT value FROM sensor_im where sensor_id = 5 LIMIT 1");
   $row = $results->fetch_assoc();
   echo number_format($row['value'],1, ",", ".");
 ?>
  &#37;</b></center></div>
 <div id='wetter3'><center>Batterie:<br><b>
 <?php
-  $results = $db->query("SELECT value FROM sensor where sensor_id = 3 LIMIT 1");
+  $results = $db->query("SELECT value FROM sensor_im where sensor_id = 3 LIMIT 1");
   $row = $results->fetch_assoc();
   echo number_format($row['value'],2, ",", ".");
 ?>
