@@ -74,7 +74,7 @@ if (isset($_GET["range"])) {
 			$label_1 = "Verlauf der letzten 24 Stunden"; 
 			$label_2 = " Uhrzeit ->"; 
 			$utime_back = " 3600 * 24 ";
-			$table = " sensordata ";
+			$table = " sensordata_im ";
 			$date_field = " DATE_FORMAT(from_unixtime(utime),'%H') ";
 			$xinterval=6;		
 	}

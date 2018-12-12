@@ -2,9 +2,7 @@
 //Hostname und Telnet-Port des FHEM-Servers
 $fhemhost = "localhost";
 $fhemport = 7072;
-session_start();
 require_once("/sd_p2/web/php_inc/config.inc.php");
-require_once("/sd_p2/web/php_inc/functions.inc.php");
 
 if(is_checked_in()) {
 	if (isset($_GET["geraet"])) {  $geraet=$_GET["geraet"]; }

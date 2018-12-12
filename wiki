@@ -1,1 +1,1 @@
-/sd_p2/web/mediawiki
+../wiki

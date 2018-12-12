@@ -1,9 +1,6 @@
 <?php
-session_start();
 require_once("/sd_p2/web/php_inc/config.inc.php");
-require_once("/sd_p2/web/php_inc/functions.inc.php");
 
-if(is_checked_in()) {
 if (isset($_GET["geraet"])) {  $geraet=$_GET["geraet"]; }
 if (isset($_GET["eigenschaft"])) {  $eigenschaft=$_GET["eigenschaft"]; }
 
@@ -24,7 +21,4 @@ if(!feof($fhemsock)) {
         print trim($zustand[0]);
 	}
 }
-} else {
-	print "nolog";
-}	
 ?>
