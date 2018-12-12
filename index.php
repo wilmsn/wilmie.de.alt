@@ -4,23 +4,8 @@
 <head>
 <?php
 require_once("/sd_p2/web/php_inc/config.inc.php");
+require_once("settings_inc.php");
 require_once("/sd_p2/web/php_inc/check_mobile.php");
-$vorname="";
-$nachname="";
-$userid="";
-$logout=false;
-$login=false;
-$is_loged_in=false;
-$session_started=false;
-$login_msg="";
-$session_cookie_ok=false; 
-$identifier_ok=false;
-$securitytoken_ok=false;
-$email="";
-$passwd="";
-$sessionid="";
-$rememberMe=0;
-$sql_show = "role in ('+', '-')";
 
 $login_msg = "";
 $reload_needed = "";
@@ -79,11 +64,6 @@ window.cookieconsent.initialise({
 var myurl="";
 
 if (top!=self) top.location.href=self.location.href;
- var vorname='<?php echo $vorname; ?>'; 
- var nachname='<?php echo $nachname; ?>'; 
- var userid='<?php echo $userid; ?>'; 
- var login_msg='<?php echo $login_msg; ?>'; 
- 
  
 function refreshPage() {
 	$("#loadPage").html(" ");
@@ -115,8 +95,8 @@ $('#home').append("<div data-role='panel' id='menu_panel' data-theme='a' data-di
 <?php    
 # Build Menu:
 # Step 1: Add Entries on Main Menu and additional Menu Panels
-	$sql="select menu1_id, menu2_id, menu3_id, class_mo, label, has_sub, url, bookmark, content, menu3_id from menu "
-	    ."where show_mo = 1 and ".$sql_show." order by menu1_id, menu2_id, menu3_id asc";	
+	$sql="select menu1_id, menu2_id, menu3_id, class_mo, label, has_sub, url, bookmark, content, menu3_id from ".$menu_tab
+	    ."where show_mo = 1 order by menu1_id, menu2_id, menu3_id asc";	
 	$stmt = $www_db->prepare($sql);
 	$stmt->execute();
 	while ( $row = $stmt->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_NEXT) ) {
@@ -167,15 +147,12 @@ else:
 
 $(document).ready(function(){
 	$('#home').append("<div id='wrapper'><div id='head'></div><div id='menu' class='menu'></div><div id='main'><div id='content'></div></div></div>");
-//	$('#head').append("<div id='head_info'>Diese Website verwendet Cookies. Durch die Nutzung erklärst du dich mit dem Einsatz von Cookies einverstanden.<br><center>"+
-//	                  "<div id='head_info1'><a href='https://wilmie.myhome-server.de/datenschutz'>Mehr Details</a></div>"+
-//					  "<div id='head_info2'><button onclick='close_cookie();'>OK</button></center></div></div>");
     $('#head').append("<img src=/img/wilmie.png border=0><img src=/img/headline_pics.png border=0>"); 
     $('#menu').append("<div id='cssmenu'><ul id='mymenu'></ul></div>");
 <?php		
 # Step 1: Add Entries on Main Menu (Level 1)
-	$sql="select menu1_id, menu2_id, menu3_id, class_dt, label, has_sub, url, bookmark, content from menu "
-	    ."where show_dt = 1 and ".$sql_show." order by menu1_id, menu2_id, menu3_id asc";	
+	$sql="select menu1_id, menu2_id, menu3_id, class_dt, label, has_sub, url, bookmark, content from ".$menu_tab
+	    ."where show_dt = 1 order by menu1_id, menu2_id, menu3_id asc";	
 	$stmt = $www_db->prepare($sql);
 	$stmt->execute();
 	while ( $row = $stmt->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_NEXT) ) {
@@ -233,7 +210,7 @@ $('#mymenu').append("<li class='hidden' id='bmme'><a href='#'>&nbsp;</a></li>");
 
 switch ( window.location.pathname ) { 
 <?php	
-   	$sql="select bookmark, content from menu where length(bookmark) > 2 and length(content) > 2 ";
+   	$sql="select bookmark, content from ".$menu_tab." menu where length(bookmark) > 2 and length(content) > 2 ";
 	$stmt = $www_db->prepare($sql);
 	$stmt->execute();
 	while ( $row = $stmt->fetch(PDO::FETCH_NUM, PDO::FETCH_ORI_NEXT) ) {
@@ -249,9 +226,6 @@ switch ( window.location.pathname ) {
   $('#bmme').removeClass('active');
   $('#bmme').addClass('hidden');
 <?php endif; ?>			 
-	eraseCookie("EMAIL");
-	eraseCookie("PASSWD");
-	eraseCookie("REMEMBER");
 });	
  
 function getcontent(mypage,myurlx) {
