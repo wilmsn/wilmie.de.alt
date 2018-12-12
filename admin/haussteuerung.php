@@ -1,10 +1,3 @@
-<?php
-session_start();
-require_once("/sd_p2/web/php_inc/config.inc.php");
-require_once("/sd_p2/web/php_inc/functions.inc.php");
-?>
-
-<?php if(is_checked_in()): ?>	
 
 <script> var basedir="/admin/"; </script>
 
@@ -35,8 +28,3 @@ $(document).ready(function(){
 <div id="haus" class="haus">
 </div>  
 
-<?php else: ?>
-
-<h1>Nicht angemeldet!</h1>
-
-<?php endif; ?>		
