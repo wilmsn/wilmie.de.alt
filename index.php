@@ -127,7 +127,7 @@ $('#home').append("<div data-role='panel' id='menu_panel' data-theme='a' data-di
 
 function close_menu() {
 <?php
-	$sql="select menu1_id from menu where menu2_id = 1 and menu3_id = 1   and has_sub = true";	
+	$sql="select menu1_id from " .$menu_tab. " where menu2_id = 1 and menu3_id = 1   and has_sub = true";	
 	$stmt = $www_db->prepare($sql);
 	$stmt->execute();
 	while ( $row = $stmt->fetch(PDO::FETCH_NUM, PDO::FETCH_ORI_NEXT) ) {
