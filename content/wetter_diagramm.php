@@ -54,8 +54,16 @@ if (isset($_GET["range"])) {
 	$range = $_GET["range"];
 	$by_range = True;
 	switch ($range) {
+		case 730:
+			$label_1 = 'der letzten 2 Jahre'; 
+			$label_2 = ' Kalendermonat ->';
+			$utime_back = "3600 * 24 *365 *2";
+			$table = " sensordata_d ";
+			$date_field = " DATE_FORMAT(from_unixtime(utime),'%m') ";
+			$xinterval=60;		 
+		break;
 		case 365:
-			$label_1 = 'der letzten 365 Tage'; 
+			$label_1 = 'des letzten Jahres'; 
 			$label_2 = ' Kalendermonat ->';
 			$utime_back = "3600 * 24 *365";
 			$table = " sensordata_d ";

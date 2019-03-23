@@ -117,7 +117,7 @@ if($mobile_browser) {
   left: 350px;
   top: 30px;
   }
-  #wetter_s1, #wetter_s2, #wetter_s3 {
+  #wetter_s1, #wetter_s2, #wetter_s3, #wetter_s4 {
   height: 50px;
   width: 100px;	  
   background: #dddddd; 
@@ -135,6 +135,9 @@ if($mobile_browser) {
   }
   #wetter_s3 {
   left: 590px;
+  }
+  #wetter_s4 {
+  left: 710px;
   }
   \n";
 
@@ -173,16 +176,25 @@ function set_divs() {
 		$('#wetter_s1').css('backgroundColor', but_color1);
 		$('#wetter_s2').css('backgroundColor', but_color2);
 		$('#wetter_s3').css('backgroundColor', but_color1);
+		$('#wetter_s4').css('backgroundColor', but_color1);
         break;
     case "365":
 		$('#wetter_s1').css('backgroundColor', but_color1);
 		$('#wetter_s2').css('backgroundColor', but_color1);
 		$('#wetter_s3').css('backgroundColor', but_color2);
+		$('#wetter_s4').css('backgroundColor', but_color1);
+        break;
+    case "730":
+		$('#wetter_s1').css('backgroundColor', but_color1);
+		$('#wetter_s2').css('backgroundColor', but_color1);
+		$('#wetter_s3').css('backgroundColor', but_color1);
+		$('#wetter_s4').css('backgroundColor', but_color2);
         break;
     default:
 		$('#wetter_s1').css('backgroundColor', but_color2);
 		$('#wetter_s2').css('backgroundColor', but_color1);
 		$('#wetter_s3').css('backgroundColor', but_color1);
+		$('#wetter_s4').css('backgroundColor', but_color1);
 	} 
     switch($('#wetter_t2').html()) {
     case "1b":
@@ -235,6 +247,10 @@ $("#wetter_s2").click(function(){
 });  
 $("#wetter_s3").click(function(){
   $('#wetter_t1').html('365')
+  set_divs();
+});  
+$("#wetter_s4").click(function(){
+  $('#wetter_t1').html('730')
   set_divs();
 });  
 $("#wetter1a").click(function(){
@@ -316,11 +332,13 @@ SOI = (typeof(SOI) != 'undefined') ? SOI : {};
 <div id='wetter4'> 
 <img id='wetter_dia' />
 </div>
-<div id='wetter_s1'>Diagramm<br>24 Stunden
+<div id='wetter_s1'>Diagramm<br>1 Tag
 </div>
-<div id='wetter_s2'>Diagramm<br>30 Tage
+<div id='wetter_s2'>Diagramm<br>1 Monat
 </div>
-<div id='wetter_s3'>Diagramm<br>365 Tage
+<div id='wetter_s3'>Diagramm<br>1 Jahr
+</div>
+<div id='wetter_s4'>Diagramm<br>2 Jahre
 </div>
 <div id='wetter_t1'>
 </div>
