@@ -14,8 +14,8 @@ $(document).ready(function(){
   dev_init(1,"sw", "Steckdose Balkon",  "Balkon_Steckdose",     "state",       "HS_Balkon_Steckdose");
   dev_init(2,"sw", "Steckdose Terasse", "Terasse_Steckdose",    "state",       "HS_Terasse_Steckdose");
   dev_init(3,"sw", "Steckdose Flur", 	"Flur_Steckdose", 	    "state",       "HS_Flur_Steckdose");
-  dev_init(4,"sw", "Wlan Steckdose 1", 	"Steckdose1",   		"Relay",       "HS_Steckdose1");
-  dev_init(5,"sw", "Wlan Steckdose 2", 	"Steckdose2",   		"Relay",       "HS_Steckdose2");
+  dev_init(4,"sw", "Wlan Steckdose 1", 	"Steckdose1",   		"Relais",       "HS_Steckdose1");
+  dev_init(5,"sw", "Wlan Steckdose 2", 	"Steckdose2",   		"Relais",       "HS_Steckdose2");
   dev_init(6,"ht", "Wohnzimmer",        "Wohnzimmer_Temp",       "state", "HT_Wohnzimmer1");
   dev_init(7,"ht", "K&uuml;che",        "Kueche_Temp",          "state",       "HT_Kueche1");
   dev_init(8,"ht", "Bastelzimmer",      "Bastelzimmer_Temp",      "state", "HT_Bastelzimmer");
