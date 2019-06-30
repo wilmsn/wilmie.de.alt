@@ -54,8 +54,24 @@ if (isset($_GET["range"])) {
 	$range = $_GET["range"];
 	$by_range = True;
 	switch ($range) {
+		case 3650:
+			$label_1 = 'Verlauf der letzten 10 Jahre'; 
+			$label_2 = ' Kalenderjahr ->';
+			$utime_back = "3600 * 24 *365 *10";
+			$table = " sensordata_d ";
+			$date_field = " DATE_FORMAT(from_unixtime(utime),'%Y') ";
+			$xinterval=1460;		 
+		break;
+        case 1825:
+           $label_1 = 'Verlauf der letzten 5 Jahre';
+           $label_2 = ' Kalenderjahr ->';
+           $utime_back = "3600 * 24 *365 *5";
+           $table = " sensordata_d ";
+           $date_field = " DATE_FORMAT(from_unixtime(utime),'%Y') ";
+           $xinterval=730;
+        break;
 		case 730:
-			$label_1 = 'der letzten 2 Jahre'; 
+			$label_1 = 'Verlauf der letzten 2 Jahre'; 
 			$label_2 = ' Kalendermonat ->';
 			$utime_back = "3600 * 24 *365 *2";
 			$table = " sensordata_d ";
@@ -63,7 +79,7 @@ if (isset($_GET["range"])) {
 			$xinterval=60;		 
 		break;
 		case 365:
-			$label_1 = 'des letzten Jahres'; 
+			$label_1 = 'Verlauf des letzten Jahres'; 
 			$label_2 = ' Kalendermonat ->';
 			$utime_back = "3600 * 24 *365";
 			$table = " sensordata_d ";
@@ -71,7 +87,7 @@ if (isset($_GET["range"])) {
 			$xinterval=60;		 
 		break;
 		case 30:
-			$label_1 = 'der letzten 30 Tage'; 
+			$label_1 = 'Verlauf der letzten 30 Tage'; 
 			$label_2 = ' Kalendertag ->';
 			$utime_back = "3600 * 24 *30";
 			$table = " sensordata_d ";
