@@ -117,7 +117,7 @@ if($mobile_browser) {
   left: 350px;
   top: 30px;
   }
-  #wetter_s1, #wetter_s2, #wetter_s3, #wetter_s4 {
+  #wetter_s1, #wetter_s2, #wetter_s3, #wetter_s4, #wetter_s5, #wetter_s6{
   height: 50px;
   width: 100px;	  
   background: #dddddd; 
@@ -139,6 +139,13 @@ if($mobile_browser) {
   #wetter_s4 {
   left: 710px;
   }
+  #wetter_s5 {
+  left: 830px;
+  }
+  #wetter_s6 {
+  left: 950px;
+  }
+
   \n";
 
 }
@@ -177,24 +184,48 @@ function set_divs() {
 		$('#wetter_s2').css('backgroundColor', but_color2);
 		$('#wetter_s3').css('backgroundColor', but_color1);
 		$('#wetter_s4').css('backgroundColor', but_color1);
+        $('#wetter_s5').css('backgroundColor', but_color1);
+        $('#wetter_s6').css('backgroundColor', but_color1);
         break;
     case "365":
 		$('#wetter_s1').css('backgroundColor', but_color1);
 		$('#wetter_s2').css('backgroundColor', but_color1);
 		$('#wetter_s3').css('backgroundColor', but_color2);
 		$('#wetter_s4').css('backgroundColor', but_color1);
+        $('#wetter_s5').css('backgroundColor', but_color1);
+        $('#wetter_s6').css('backgroundColor', but_color1);
         break;
     case "730":
 		$('#wetter_s1').css('backgroundColor', but_color1);
 		$('#wetter_s2').css('backgroundColor', but_color1);
 		$('#wetter_s3').css('backgroundColor', but_color1);
 		$('#wetter_s4').css('backgroundColor', but_color2);
+        $('#wetter_s5').css('backgroundColor', but_color1);
+        $('#wetter_s6').css('backgroundColor', but_color1);
+        break;
+    case "1825":
+        $('#wetter_s1').css('backgroundColor', but_color1);
+        $('#wetter_s2').css('backgroundColor', but_color1);
+        $('#wetter_s3').css('backgroundColor', but_color1);
+        $('#wetter_s4').css('backgroundColor', but_color1);
+        $('#wetter_s5').css('backgroundColor', but_color2);
+        $('#wetter_s6').css('backgroundColor', but_color1);
+        break;
+    case "3650":
+        $('#wetter_s1').css('backgroundColor', but_color1);
+        $('#wetter_s2').css('backgroundColor', but_color1);
+        $('#wetter_s3').css('backgroundColor', but_color1);
+        $('#wetter_s4').css('backgroundColor', but_color1);
+        $('#wetter_s5').css('backgroundColor', but_color1);
+        $('#wetter_s6').css('backgroundColor', but_color2);
         break;
     default:
 		$('#wetter_s1').css('backgroundColor', but_color2);
 		$('#wetter_s2').css('backgroundColor', but_color1);
 		$('#wetter_s3').css('backgroundColor', but_color1);
 		$('#wetter_s4').css('backgroundColor', but_color1);
+        $('#wetter_s5').css('backgroundColor', but_color1);
+        $('#wetter_s6').css('backgroundColor', but_color1);
 	} 
     switch($('#wetter_t2').html()) {
     case "1b":
@@ -251,6 +282,14 @@ $("#wetter_s3").click(function(){
 });  
 $("#wetter_s4").click(function(){
   $('#wetter_t1').html('730')
+  set_divs();
+});  
+$("#wetter_s5").click(function(){
+  $('#wetter_t1').html('1825')
+  set_divs();
+});  
+$("#wetter_s6").click(function(){
+  $('#wetter_t1').html('3650')
   set_divs();
 });  
 $("#wetter1a").click(function(){
@@ -339,6 +378,10 @@ SOI = (typeof(SOI) != 'undefined') ? SOI : {};
 <div id='wetter_s3'>Diagramm<br>1 Jahr
 </div>
 <div id='wetter_s4'>Diagramm<br>2 Jahre
+</div>
+<div id='wetter_s5'>Diagramm<br>5 Jahre
+</div>
+<div id='wetter_s6'>Diagramm<br>10 Jahre
 </div>
 <div id='wetter_t1'>
 </div>
